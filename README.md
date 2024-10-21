@@ -1,5 +1,6 @@
-|==========================================================================================================================|
-Organization Name: Planned to A.T., Inc.
+
+**Organization Name: Planned to A.T., Inc.**
+
 https://www.plannedtoat.org/
 Planned to A.T. was founded by two educators Ashley Rutland and Tiffany Pearson-Kilgore. We recognized a deficit
 among our black male students in particular, who often dreamed of becoming professional athletes for financial gain
@@ -42,4 +43,3 @@ A.T.'s 3 content sessions. The platform's data will help PTAT determine students
 including habits implemented, and total savings to reward students through a tiered incentive program for meeting
 their goals. It will also be used to see how many students did not have a savings account prior to starting the program.
 Additionally, tracking if conversations are happening across generations.
-|==========================================================================================================================|
