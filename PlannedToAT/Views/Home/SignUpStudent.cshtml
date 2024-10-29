@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Sign Up Student";
+}
+
+@model PlannedToAT.Models.SignUpStudent
+<h2>Student Sign Up Form</h2>
+
+<form asp-action="SubmitStudentData" method="post">
+    <div class="form-group">
+        <label asp-for="StudentName">Name</label>
+        <input type="text" asp-for="StudentName" class="form-control" placeholder="Enter student's full name" required />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="DateOfBirth">Date of Birth (DOB)</label>
+        <input type="date" asp-for="DateOfBirth" class="form-control" required />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="RaceEthnicity">Race/Ethnicity</label>
+        <input type="text" asp-for="RaceEthnicity" class="form-control" placeholder="Enter race/ethnicity" required />
+    </div>
+    
+    <div class="form-group">
+    <label asp-for="PhoneNumber">Cell Phone Number</label>
+    <input type="tel" asp-for="PhoneNumber" class="form-control" placeholder="Enter cell phone number" />
+</div>
+
+<div class="form-group">
+    <label asp-for="EmailAddress">Email Address</label>
+    <input type="email" asp-for="EmailAddress" class="form-control" placeholder="Enter email address" />
+</div>
+
+    <div class="form-group">
+        <label asp-for="Institution">Institution/School/Youth Group</label>
+        <input type="text" asp-for="Institution" class="form-control" placeholder="Enter institution or school name" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubgroupOrTeam">Subgroup or Team</label>
+        <input type="text" asp-for="SubgroupOrTeam" class="form-control" placeholder="Enter subgroup or team name" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
