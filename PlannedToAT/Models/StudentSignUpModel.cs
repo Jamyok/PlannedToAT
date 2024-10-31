@@ -25,5 +25,7 @@ namespace PlannedToAT.Models
         public string? Institution { get; set; } // Nullable to avoid constructor warning
 
         public string? SubgroupOrTeam { get; set; }
+
+         public string? ESig { get; set; }
     }
 }
