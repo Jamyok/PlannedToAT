@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 //I need to commit
 namespace PlannedToAT.Controllers
 {
@@ -29,6 +31,28 @@ namespace PlannedToAT.Controllers
         public IActionResult SignUpStudent()
         {
             return View();
+        }
+        public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
+        {
+            var model = new SignUpStudent
+            {
+                StudentName = studentName,
+                DateOfBirth = dob,
+                RaceEthnicity = race,
+                PhoneNumber = phone,
+                EmailAddress = email,
+                Institution = institution,
+                SubgroupOrTeam = subgroup
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            return RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

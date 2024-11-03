@@ -5,7 +5,7 @@
 @model PlannedToAT.Models.SignUpStudent
 <h2>Student Sign Up Form</h2>
 
-<form asp-action="SubmitStudentData" method="post">
+<form asp-controller="Student" asp-action="SubmitStudentData" method="post">
     <div class="form-group">
         <label asp-for="StudentName">Name</label>
         <input type="text" asp-for="StudentName" class="form-control" placeholder="Enter student's full name" required />
