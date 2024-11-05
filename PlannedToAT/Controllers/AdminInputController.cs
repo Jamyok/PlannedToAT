@@ -9,6 +9,10 @@ namespace AdminUser.Controllers
         {
             return View();
         }
+        public IActionResult AdminReports()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
