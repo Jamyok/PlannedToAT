@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AdminUser.Models
+namespace PlannedToAT.Models
 {
-    public class AdminInputFormModel
-    {
+    public class AdminInputFormModel {
+
         [Required]
         [Display(Name = "First Name")]
         public string? FirstName { get; set; }

@@ -47,6 +47,16 @@ namespace PlannedToAT.Controllers
 
             return View(model);
         }
+        public IActionResult AdminDashboard(string firstName)
+        {
+            var model = new AdminInputFormModel
+            {
+                FirstName = firstName
+                // Initialize other properties if necessary
+            };
+
+            return View("AdminDashboard", model); // Ensure the view name matches your file name
+        }
         [HttpPost]
         public IActionResult Logout()
         {
