@@ -1,0 +1,122 @@
+@model PlannedToAT.Models.AdminInputFormModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .dashboard-container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .welcome-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .graph-box {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .logout-button {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .logout-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo">Logo</div>
+            <div class="nav">
+                <a href="#">Dashboard</a>
+                <a href="#">Forms</a>
+                <a href="#">Profile</a>
+                <form asp-controller="AdminInput" asp-action="Logout" method="post" style="display:inline;">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </div>
+        </div>
+        </div>
+        <div class="welcome-message">
+            Welcome, @Model.FirstName!
+        </div>
+        <div class="statistics">
+            <div class="graph-box">Graph 1</div>
+            <div class="graph-box">Graph 2</div>
+            <div class="graph-box">Graph 3</div>
+        </div>
+    </div>
+</body>
+</html>
