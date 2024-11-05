@@ -10,7 +10,11 @@ namespace StudentManagementApp.Models
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string LastName { get; set; }
 
         [StringLength(100)]
         public string School { get; set; }
