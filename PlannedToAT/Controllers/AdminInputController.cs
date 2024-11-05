@@ -1,37 +1,47 @@
 using Microsoft.AspNetCore.Mvc;
-using AdminUser.Models;
+using PlannedToAT.Models;
 
 namespace AdminUser.Controllers
 {
     public class AdminInputController : Controller
     {
-        // GET: Display the form (changed view name to Admin)
         public IActionResult Admin()
         {
             return View();
         }
+        public IActionResult AdminReports()
+        {
+            return View();
+        }
 
-        // POST: Handle form submission
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Submit(AdminInputFormModel model)
         {
             if (ModelState.IsValid)
             {
-                // Logic for processing the form data goes here, e.g., saving to a database
-
-                // Redirect to Success page upon successful submission
-                return RedirectToAction("Success");
+                // Logic to create the admin user (save to database, etc.)
+                return RedirectToAction("AdminDashboard", "Home", new { firstName = model.FirstName });
             }
 
-            // If there are validation errors, re-display the form with validation messages
             return View("Admin", model);
         }
 
-        // GET: Display success page
-        public IActionResult Success()
+        public IActionResult Dashboard(string firstName)
         {
-            return View();
+            var model = new AdminInputFormModel
+            {
+                FirstName = firstName
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            // Implement your logout logic here
+            return RedirectToAction("Index", "Home");
         }
     }
 }

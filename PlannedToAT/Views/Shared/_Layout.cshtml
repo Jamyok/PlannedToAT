@@ -10,7 +10,11 @@
 </head>
 <body>
     @* Conditional Header Navigation *@
-    @if (!(ViewContext.RouteData.Values["controller"].ToString() == "Student" && ViewContext.RouteData.Values["action"].ToString() == "StudentDashboard"))
+    @if (!(ViewContext.RouteData.Values["controller"].ToString() == "Student" 
+      || ViewContext.RouteData.Values["action"].ToString() == "StudentDashboard"
+      || ViewContext.RouteData.Values["controller"].ToString() == "AdminInput"
+      || ViewContext.RouteData.Values["action"].ToString() == "AdminDashboard"))
+    
     {
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
