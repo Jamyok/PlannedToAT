@@ -32,6 +32,12 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
+
+        //change this later
+        public IActionResult AdminReports()
+        {
+            return View();
+        }
         public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
         {
             var model = new SignUpStudent
