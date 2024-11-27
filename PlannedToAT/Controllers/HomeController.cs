@@ -71,11 +71,6 @@ namespace PlannedToAT.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-         public IActionResult Admin()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

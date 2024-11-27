@@ -3,9 +3,9 @@ using PlannedToAT.Models;
 
 namespace AdminUser.Controllers
 {
-    public class AdminInputController : Controller
+    public class AdminController : Controller
     {
-        public IActionResult Admin()
+        public IActionResult Index()
         {
             return View();
         }
