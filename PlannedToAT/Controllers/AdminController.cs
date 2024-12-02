@@ -20,20 +20,14 @@ namespace AdminUser.Controllers
         {
             if (ModelState.IsValid)
             {
+                var applicationDbContext = new ApplicationDbContext();
+                applicationDbContext.Add(model);
+                applicationDbContext.SaveChanges();
                 // Logic to create the admin user (save to database, etc.)
                 return RedirectToAction("AdminDashboard", "Home", new { firstName = model.FirstName });
             }
 
             return View("Admin", model);
-        }
-
-        public IActionResult Dashboard(string firstName)
-        {
-            var model = new AdminInputFormModel
-            {
-                FirstName = firstName
-            };
-            return View(model);
         }
 
         [HttpPost]
