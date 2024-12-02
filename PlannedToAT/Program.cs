@@ -1,8 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using PlannedToAT;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<StudentContext>(options =>
+{options.UseMySql("server=root@localhost:3306;password=Faye2011;database=plannedtoat")
+})
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
