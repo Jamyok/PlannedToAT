@@ -6,8 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StudentContext>(options =>
-{options.UseMySql("server=root@localhost:3306;password=Faye2011;database=plannedtoat")
-})
+{options.UseMySql("server=localhost;database=plannedtoat;user=user;password=Faye2011")
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
