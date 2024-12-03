@@ -5,8 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Specify the MySQL server version explicitly
 builder.Services.AddDbContext<StudentContext>(options =>
-{options.UseMySql("server=localhost;database=plannedtoat;user=user;password=Faye2011")
+{
+    options.UseMySql(
+        "server=localhost;database=plannedtoat;user=user;password=Faye2011",
+        new MySqlServerVersion(new Version(8, 0, 33)) // Replace 8.0.33 with your actual MySQL version
+    );
 });
 
 var app = builder.Build();
@@ -15,7 +21,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
