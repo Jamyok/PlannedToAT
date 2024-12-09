@@ -4,16 +4,14 @@ using PlannedToAT;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Specify the MySQL server version explicitly
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<StudentContext>(options =>
-{
     options.UseMySql(
-        "server=localhost;database=plannedtoat;user=user;password=Faye2011",
-        new MySqlServerVersion(new Version(8, 0, 33)) // Replace 8.0.33 with your actual MySQL version
-    );
-});
+        connectionString, 
+        ServerVersion.AutoDetect(connectionString)
+    )
+);
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 

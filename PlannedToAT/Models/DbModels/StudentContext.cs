@@ -2,11 +2,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PlannedToAT
 {
-    public class StudentContext(DbContextOptions<StudentContext> options) : DbContext(options)
+    public class StudentContext : DbContext
     {
+        public StudentContext(DbContextOptions<StudentContext> options) : base(options)
+        {
+        }
 
         // DbSet for the Students table
-        public required DbSet<Student> Students { get; set; }
+        public DbSet<Student> Students { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +33,7 @@ namespace PlannedToAT
                       .HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.EntryDate)
-                      .HasColumnName("Entery_date")
+                      .HasColumnName("Entry_date") // Fixed the typo here
                       .HasColumnType("datetime");
             });
         }

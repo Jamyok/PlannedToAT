@@ -4,9 +4,9 @@ using PlannedToAT.Models;
 public class StudentController : Controller
 {
     [HttpGet]
-    public IActionResult StudentForm()
+    public IActionResult StudentDashboard()
     {
-        return View();
+        return View("/Views/StudentViews/StudentDashboard.cshtml");
     }
 
     [HttpPost]
@@ -19,7 +19,7 @@ public class StudentController : Controller
         }
 
         // If there are validation errors, return to the form
-        return View("StudentForm", studentData);
+        return View("/Views/StudentViews/StudentDashboard.cshtml", studentData);
     }
 
     public IActionResult Success()

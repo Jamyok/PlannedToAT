@@ -33,4 +33,4 @@ namespace PlannedToAT.Models
 
         public string? SubgroupOrTeam { get; set; }
     }
-}
+}SELECT*

@@ -28,7 +28,7 @@ namespace PlannedToAT.Controllers
         }
         public IActionResult SignUpStudent()
         {
-            return View();
+            return View("/Views/StudentViews/SignUpStudent.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
