@@ -10,11 +10,5 @@ namespace PlannedToAT.Models
         public DbSet<StudentData> Students { get; set; }
 
         // Add AdminInputFormModel DbSet
-        public DbSet<AdminInputFormModel> AdminInputForms { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseMySQL("server=localhost;database=plannedtoat;user=root;password=Moses.123");
-        }
     }
 }

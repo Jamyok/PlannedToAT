@@ -3,11 +3,12 @@ using PlannedToAT.Models;
 
 namespace AdminUser.Controllers
 {
-    public class AdminController : Controller
+    public class AdminInputController : Controller
     {
-        public IActionResult Index()
+        
+        public IActionResult Admin()
         {
-            return View();
+            return View("~/Views/Admin/Admin.cshtml");        
         }
         public IActionResult AdminReports()
         {
@@ -20,14 +21,23 @@ namespace AdminUser.Controllers
         {
             if (ModelState.IsValid)
             {
-                var applicationDbContext = new ApplicationDbContext();
-                applicationDbContext.Add(model);
-                applicationDbContext.SaveChanges();
+                var adminDbContext = new AdminDbContext();
+                adminDbContext.Add(model);
+                adminDbContext.SaveChanges();
                 // Logic to create the admin user (save to database, etc.)
                 return RedirectToAction("AdminDashboard", "Home", new { firstName = model.FirstName });
             }
 
-            return View("Admin", model);
+            return View("~/Views/Admin/Admin.cshtml", model);
+        }
+
+        public IActionResult Dashboard(string firstName)
+        {
+            var model = new AdminInputFormModel
+            {
+                FirstName = firstName
+            };
+            return View("~/Views/Home/AdminDashboard.cshtml", model);
         }
 
         [HttpPost]

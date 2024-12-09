@@ -1,0 +1,28 @@
+@model PlannedToAT.Models.AdminLoginModel
+
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+    <h2>Admin Login</h2>
+    <form asp-controller="AdminLogin" asp-action="AdminLogin" method="post">
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <p>
+        <a asp-controller="AdminLogin" asp-action="AdminForgotPassword">Forgot Password?</a>
+    </p>
+</div>
