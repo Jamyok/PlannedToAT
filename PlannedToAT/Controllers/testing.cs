@@ -5,7 +5,7 @@
     {
         public class DatabaseTester
         {
-            private string connectionString = "Server=your-server-address;Database=plannedtoat;User ID=your-username;Password=your-password;";
+            private string connectionString = "hostname=plannedtoatscus.mysql.database.azure.com,port=3306,username=Jamy,password=Faye2011,";
 
             public void TestConnection()
             {
