@@ -10,7 +10,7 @@ namespace PlannedToAT.Models
 
         [Required(ErrorMessage = "Date of Birth is required")]
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Race/Ethnicity is required")]
         public string? RaceEthnicity { get; set; } // Nullable to avoid constructor warning
