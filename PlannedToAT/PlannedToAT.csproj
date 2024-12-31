@@ -14,4 +14,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Models/StudentModels/StudentSignUpModel.cs" />
+  </ItemGroup>
+
 </Project>

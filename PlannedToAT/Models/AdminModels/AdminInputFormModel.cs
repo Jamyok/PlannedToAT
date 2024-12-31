@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PlannedToAT.Models
+namespace PlannedToAT.Models.AdminModels
 {
     public class AdminInputFormModel {
 

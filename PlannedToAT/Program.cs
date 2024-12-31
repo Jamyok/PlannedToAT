@@ -1,7 +1,21 @@
+using Microsoft.EntityFrameworkCore;
+using PlannedToAT.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        // Add custom view location
+        options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
+    });
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 

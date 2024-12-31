@@ -1,19 +1,18 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PlannedToAT.Models
+namespace PlannedToAT.Models.StudentModels
 {
-    public class SignUpStudent
+    public class StudentSignUpModel
     {
         [Required(ErrorMessage = "Name is required")]
-        public string? StudentName { get; set; } // Nullable to allow for uninitialized state
+        public string? StudentName { get; set; } 
 
         [Required(ErrorMessage = "Date of Birth is required")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Race/Ethnicity is required")]
-        public string? RaceEthnicity { get; set; } // Nullable to avoid constructor warning
+        public string? RaceEthnicity { get; set; } 
 
         [Phone(ErrorMessage = "Invalid phone number format")]
         public string? PhoneNumber { get; set; }
@@ -22,7 +21,7 @@ namespace PlannedToAT.Models
         public string? EmailAddress { get; set; }
 
         [Required(ErrorMessage = "Institution/School/Youth Group is required")]
-        public string? Institution { get; set; } // Nullable to avoid constructor warning
+        public string? Institution { get; set; } 
 
         public string? SubgroupOrTeam { get; set; }
 
