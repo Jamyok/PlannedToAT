@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-//I need to commit
+using System.Diagnostics;
+using PlannedToAT.Models.StudentModels;
+using PlannedToAT.Models.AdminModels;
+
 namespace PlannedToAT.Controllers
 {
     public class HomeController : Controller
@@ -14,7 +16,7 @@ namespace PlannedToAT.Controllers
         {
             _logger = logger;
         }
-        //Add items as webpagges\\
+
         public IActionResult Index()
         {
             return View();
@@ -24,17 +26,44 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
+
+        // Displays the main sign-up page
         public IActionResult SignUp()
         {
             return View();
         }
+
+        // Displays the student sign-up page
         public IActionResult SignUpStudent()
         {
             return View();
         }
+
+        // Handles student form submission
+        [HttpPost]
+        public IActionResult SignUpStudent(StudentSignUpModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("StudentDashboard", new 
+                {
+                    studentName = model.StudentName,
+                    dob = model.DateOfBirth,
+                    race = model.RaceEthnicity,
+                    phone = model.PhoneNumber,
+                    email = model.EmailAddress,
+                    institution = model.Institution,
+                    subgroup = model.SubgroupOrTeam
+                });
+            }
+
+            return View(model);
+        }
+
+        // Displays student dashboard after submission
         public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
         {
-            var model = new SignUpStudent
+            var model = new StudentSignUpModel
             {
                 StudentName = studentName,
                 DateOfBirth = dob,
@@ -47,25 +76,49 @@ namespace PlannedToAT.Controllers
 
             return View(model);
         }
+
+        public IActionResult SignUpAdmin()
+        {
+            return View("~/Views/AdminViews/AdminSignUp.cshtml");
+        }
+
+
+        // Handles admin form submission
+        [HttpPost]
+        public IActionResult SignUpAdmin(AdminInputFormModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("AdminDashboard", new { firstName = model.FirstName });
+            }
+
+            return View(model);
+        }
+
+        // Displays admin dashboard
         public IActionResult AdminDashboard(string firstName)
         {
             var model = new AdminInputFormModel
             {
                 FirstName = firstName
-                // Initialize other properties if necessary
             };
 
-            return View("AdminDashboard", model); // Ensure the view name matches your file name
+            return View(model);
         }
+
         [HttpPost]
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
             return RedirectToAction("Index", "Home");
         }
 
-         public IActionResult Admin()
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        public IActionResult ViewEula()
         {
             return View();
         }
@@ -74,10 +127,6 @@ namespace PlannedToAT.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        public IActionResult ViewEula()
-        {
-            return View();
         }
     }
 }
