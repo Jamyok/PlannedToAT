@@ -1,12 +1,34 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PlannedToAT.Data;
 using StudentManagementApp.Models;
+
 
 namespace PlannedToAT.Models
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+      public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public required DbSet<SignUpStudent> SignUpStudents { get; set; }
 
-        public required DbSet<StudentData> Students { get; set; }
+
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        public ApplicationDbContext()
+        {
+        }
+
+        public static ApplicationDbContext Create()
+    {
+        return new ApplicationDbContext();
     }
+
+    // Your existing DbSets
+    public DbSet<SignUpStudent> SignUpStudents { get; set; }
+
+    public DbSet<StudentData> Students { get; set; }
+
+}
 }

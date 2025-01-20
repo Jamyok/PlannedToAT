@@ -5,7 +5,11 @@
     {
         public class DatabaseTester
         {
-            private string connectionString = "hostname=plannedtoatscus.mysql.database.azure.com,port=3306,username=Jamy,password=Faye2011,";
+            //Azure
+           // private string connectionString = "hostname=plannedtoatscus.mysql.database.azure.com,port=3306,username=Jamy,password=Faye2011,";
+
+           //Local
+           private string connectionString = "hostname=LocalHost,port=3306,username=root,password=Faye2011,";
 
             public void TestConnection()
             {

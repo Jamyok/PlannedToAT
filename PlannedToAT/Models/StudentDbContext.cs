@@ -4,7 +4,7 @@ namespace PlannedToAT.Models
 {
     public class PlannedToATDbContext(DbContextOptions<PlannedToATDbContext> options) : DbContext(options)
     {
-        public required DbSet<SignUpStudent> StudentInputForms { get; set; }
+        public DbSet<SignUpStudent> StudentInputForms { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
