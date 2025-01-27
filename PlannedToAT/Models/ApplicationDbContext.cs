@@ -9,7 +9,11 @@ namespace PlannedToAT.Models
       public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
+        // Existing DbSet properties
+        public DbSet<SignUpStudent> SignUpStudents { get; set; }
+        public DbSet<StudentData> Students { get; set; }
 
+        // Add AdminInputFormModel DbSet
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -23,6 +27,7 @@ namespace PlannedToAT.Models
         public static ApplicationDbContext Create()
     {
         return new ApplicationDbContext();
+
     }
 
     // Your existing DbSets

@@ -1,5 +1,3 @@
-@model PlannedToAT.Models.SignUpStudent
-
 @{
     ViewData["Title"] = "Student Dashboard";
 }
@@ -19,13 +17,13 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-        
+
         .dashboard-container {
             width: 90%;
             max-width: 1200px;
@@ -38,16 +36,19 @@
         /* Header Section */
         .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             border-bottom: 2px solid #ddd;
             padding-bottom: 10px;
             margin-bottom: 20px;
+            background-color: #2e3b4e; /* Light dark blue for a calm theme */
+            color: white;
         }
 
         .logo {
             font-size: 24px;
             font-weight: bold;
+            color: #3498db; /* A brighter blue for logo */
         }
 
         .nav {
@@ -57,54 +58,104 @@
 
         .nav a {
             text-decoration: none;
-            color: #333;
+            color: white;
             font-weight: bold;
         }
 
+        .nav a:hover {
+            background-color: #1f2d3d;
+            padding: 8px 16px;
+        }
+
+        /* Welcome message */
         .welcome-message {
             font-size: 24px;
+            color: #34495e;
             margin-bottom: 20px;
         }
 
+        /* Statistics (Graph boxes) */
         .statistics {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 30px;
+            margin-top: 30px;
         }
 
         .graph-box {
-            background-color: #e9ecef;
+            background-color: #f8f9fa; /* A light background for graphs */
             border-radius: 8px;
             padding: 20px;
             text-align: center;
             font-size: 18px;
             font-weight: bold;
-            color: #6c757d;
+            color: #2c3e50;
+            border: 1px solid #ddd;
+        }
+
+        .graph-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Header Section -->
         <div class="header">
-            <div class="logo">Logo</div>
-            <div class="nav">
+            <div class="logo">Student Dashboard</div>
+            <nav class="nav">
                 <a href="#">Dashboard</a>
                 <a href="#">Forms</a>
                 <a href="#">Profile</a>
-            </div>
+            </nav>
+            <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
         </div>
+
+        <!-- Welcome Message -->
         <div class="welcome-message">
             Welcome, @Model.StudentName!
         </div>
+
+        <!-- Graphs Section -->
         <div class="statistics">
-            <div class="graph-box">Graph 1</div>
-            <div class="graph-box">Graph 2</div>
-            <div class="graph-box">Graph 3</div>
+            <!-- Graph 1 -->
+            <div class="graph-box">
+                <h3>Savings</h3>
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fdatavizproject.com%2Fdata-type%2Fline-chart%2F&psig=AOvVaw2NvKt3kmHXZZ8RuopO1xdE&ust=1733626962610000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPDkve3VlIoDFQAAAAAdAAAAABAY" alt="Graph 1">
+                <p>Track your savings!</p>
+            
+            </div>
+            <!-- Graph 2 -->
+            <div class="graph-box">
+                <h3>Upcoming Forms</h3>
+                <img src="https://via.placeholder.com/500x250/2ecc71/ffffff?text=Upcoming+Assignments" alt="Graph 2">
+                <p>Your upcoming forms and deadlines</p>
+            </div>  
+            <div class="graph-box">
+                <h3>Progress</h3>
+                 <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fdatavizproject.com%2Fdata-type%2Fline-chart%2F&psig=AOvVaw2NvKt3kmHXZZ8RuopO1xdE&ust=1733626962610000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPDkve3VlIoDFQAAAAAdAAAAABAY" alt="Graph 1">
+            </div>    
         </div>
     </div>
 </body>
 </html>
-
-<form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
-    <button type="submit" class="btn btn-link">Logout</button>
-</form>

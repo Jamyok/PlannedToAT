@@ -2,7 +2,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlannedToAT.Models
 {
-    public class AdminInputFormModel {
+    public class AdminInputFormModel
+    {
+        [Key] // Define a dedicated primary key
+        public int Id { get; set; }
+
+        [Required]
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string? Phone { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
@@ -27,11 +35,6 @@ namespace PlannedToAT.Models
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         [Display(Name = "Confirm Password")]
         public string? ConfirmPassword { get; set; }
-
-        [Required]
-        [Phone]
-        [Display(Name = "Phone Number")]
-        public string? Phone { get; set; }
 
         [Required]
         [Display(Name = "Security Question")]

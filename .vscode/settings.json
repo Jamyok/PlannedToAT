@@ -9,12 +9,13 @@
                 "enableSsl": "Disabled"
             },
             "previewLimit": 50,
-            "server": "plannedtoatscus.mysql.database.azure.com",
+            "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "plannedtoat",
-            "username": "Jamy",
-            "database": "plannedtoat"
+            "name": "Local",
+            "database": "mysql",
+            "username": "root",
+            "password": "Moses.123"      
         }
     ]
 }

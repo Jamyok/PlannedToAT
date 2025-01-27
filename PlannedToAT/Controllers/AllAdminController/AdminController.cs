@@ -5,9 +5,10 @@ namespace AdminUser.Controllers
 {
     public class AdminInputController : Controller
     {
+        
         public IActionResult Admin()
         {
-            return View();
+            return View("~/Views/Admin/Admin.cshtml");        
         }
         public IActionResult AdminReports()
         {
@@ -20,11 +21,14 @@ namespace AdminUser.Controllers
         {
             if (ModelState.IsValid)
             {
+                var adminDbContext = new AdminDbContext();
+                adminDbContext.Add(model);
+                adminDbContext.SaveChanges();
                 // Logic to create the admin user (save to database, etc.)
                 return RedirectToAction("AdminDashboard", "Home", new { firstName = model.FirstName });
             }
 
-            return View("Admin", model);
+            return View("~/Views/Admin/Admin.cshtml", model);
         }
 
         public IActionResult Dashboard(string firstName)
@@ -33,7 +37,7 @@ namespace AdminUser.Controllers
             {
                 FirstName = firstName
             };
-            return View(model);
+            return View("~/Views/Home/AdminDashboard.cshtml", model);
         }
 
         [HttpPost]

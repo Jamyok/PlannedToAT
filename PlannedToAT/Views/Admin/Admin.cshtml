@@ -1,13 +1,13 @@
 @model PlannedToAT.Models.AdminInputFormModel
 
 @{
-    ViewData["Title"] = "Admin Registration Form";
+    ViewData["Title"] = "Admin Sign up Form";
 }
 
 <div class="container" style="max-width: 500px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <h2 style="text-align: center; margin-bottom: 20px;">@ViewData["Title"]</h2>
 
-    <form form asp-controller="AdminInput" asp-action="Submit" method="post">
+    <form form asp-controller="Admin" asp-action="Submit" method="post">
         <div class="form-group" style="margin-bottom: 15px;">
             <label asp-for="FirstName"></label>
             <input asp-for="FirstName" class="form-control" />
