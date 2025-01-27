@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlannedToAT.Models;
 
@@ -11,39 +12,14 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250120193913_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("PlannedToAT.Models.SignUpStudent", b =>
-                {
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ESig")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("EmailAddress")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Institution")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("RaceEthnicity")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StudentName")
-                        .IsRequired()
                 .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
@@ -281,10 +257,6 @@ namespace PlannedToAT.Migrations
                     b.Property<string>("SubgroupOrTeam")
                         .HasColumnType("longtext");
 
-
-                    b.HasKey("PhoneNumber");
-
-                    b.ToTable("SignUpStudents");
                     b.HasKey("Id");
 
                     b.ToTable("studentinputforms");
