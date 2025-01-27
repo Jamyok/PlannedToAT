@@ -38,29 +38,6 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
-
-        // Handles student form submission
-        [HttpPost]
-        public IActionResult SignUpStudent(StudentSignUpModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                return RedirectToAction("StudentDashboard", new 
-                {
-                    studentName = model.StudentName,
-                    dob = model.DateOfBirth,
-                    race = model.RaceEthnicity,
-                    phone = model.PhoneNumber,
-                    email = model.EmailAddress,
-                    institution = model.Institution,
-                    subgroup = model.SubgroupOrTeam
-                });
-            }
-
-            return View(model);
-        }
-
-        // Displays student dashboard after submission
         public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
         {
             var model = new StudentSignUpModel
@@ -113,12 +90,7 @@ namespace PlannedToAT.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Admin()
-        {
-            return View();
-        }
-
-        public IActionResult ViewEula()
+         public IActionResult Admin()
         {
             return View();
         }

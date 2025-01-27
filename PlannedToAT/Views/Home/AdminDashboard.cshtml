@@ -1,0 +1,147 @@
+@model PlannedToAT.Models.AdminInputFormModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 30px;
+            background-color: #2d3e50;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .nav a:hover {
+            background-color: #1f2d3d;
+        }
+        .welcome-message {
+            font-size: 20px;
+            color: #2d3e50;
+            margin-top: 20px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 40px;
+        }
+        .box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .box h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #2d3e50;
+        }
+        .box p {
+            font-size: 18px;
+            color: #555;
+        }
+        .box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="logo">Admin Dashboard</div>
+            <nav class="nav">
+                <a href="@Url.Action("Index", "Admin")">Dashboard</a>
+                <a href="@Url.Action("Users", "Admin")">Users</a>
+                <a href="@Url.Action("AdminReports", "Home")">Reports</a>
+                <a href="@Url.Action("Settings", "Admin")">Settings</a>
+            </nav>
+            <form asp-controller="AdminInput" asp-action="Logout" method="post" style="display:inline;">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+
+        <!-- Welcome Message -->
+        <div class="welcome-message">
+            Welcome, @Model.FirstName!
+        </div>
+
+        <!-- Metrics Section -->
+        <div class="metrics">
+            <!-- Graph 1 -->
+            <div class="box">
+                <h3>Total Users</h3>
+                <p>1,237</p>
+            </div>
+            <!-- Graph 2 -->
+            <div class="box">
+                <h3>Graph</h3>
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F37490420%2Fhow-to-create-a-placeholder-for-empty-factor-levels-on-a-bar-chart-axis-using-gg&psig=AOvVaw2Ga4aQivpzn5i_ZCbXlqtS&ust=1733626517516000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIj955nUlIoDFQAAAAAdAAAAABAE" alt="Graph 2">
+                <p>Data Visualization</p>
+            </div>
+            <!-- Graph 3 -->
+            <div class="box">
+                <h3>Graph 2</h3>
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F16954194%2Fflot-axis-labels-monthnames-wrongly-ordered&psig=AOvVaw2Ga4aQivpzn5i_ZCbXlqtS&ust=1733626517516000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIj955nUlIoDFQAAAAAdAAAAABAQ" alt="Graph 3">
+                <p>Data Visualization</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

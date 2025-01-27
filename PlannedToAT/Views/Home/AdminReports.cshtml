@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = "Admin Reports";
+}
+
+<h2>Admin Reports</h2>
+
+<form asp-action="AdminReports" method="post">
+    <div>
+        <label for="reportSelection">Choose a report:</label>
+        <select id="reportSelection" name="reportSelection" required>
+            <option value="">Select a report</option>
+            <option value="StudentsWithBankAccounts">Students with Bank Accounts</option>
+            <option value="StudentDetails">Student Details</option>
+            <option value="TotalStudents">Total Number of Students</option>
+        </select>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<hr />
+
+@if (ViewBag.ReportType != null)
+{
+    <h3>Report: @ViewBag.ReportTitle</h3>
+
+    @if (ViewBag.ReportType == "TotalStudents")
+    {
+        <p>Total number of students: @ViewBag.TotalStudents</p>
+    }
+    else if (ViewBag.ReportType == "StudentsWithBankAccounts")
+    {
+        <p>Number of students with bank accounts: @ViewBag.StudentsWithBankAccounts</p>
+    }
+    else if (ViewBag.ReportType == "StudentDetails")
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>School</th>
+                    <th>Organization</th>
+                    <th>Graduating Year</th>
+                    <th>Has Bank Account</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in ViewBag.StudentDetails)
+                {
+                    <tr>
+                        <td>@student.FirstName</td>
+                        <td>@student.LastName</td>
+                        <td>@student.School</td>
+                        <td>@student.Organization</td>
+                        <td>@student.GraduatingYear</td>
+                        <td>@(student.HasBankAccount ? "Yes" : "No")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

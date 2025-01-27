@@ -1,10 +1,11 @@
 @{
     ViewData["Title"] = "Sign Up";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Please select what kind of user you are.</p>
+<div class="container text-center" style="margin-top: 50px;">
+    <h1>@ViewData["Title"]</h1>
+    <p>Please select what kind of user you are.</p>
 
-<a asp-controller="Home" asp-action="SignUpStudent">Student Sign Up</a> <br />
+<a class="asp-controller="Home" asp-action="SignUpStudent">Student Sign Up</a>
 
-<a asp-controller="Home" asp-action="SignUpAdmin">Admin Sign Up</a>
+<a class="asp-controller="Home" asp-action="Admin">Admin</a>
