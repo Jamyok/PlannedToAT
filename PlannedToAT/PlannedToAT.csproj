@@ -19,4 +19,8 @@
     <PackageReference Include="MySql.Data" Version="9.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Models/StudentModels/StudentSignUpModel.cs" />
+  </ItemGroup>
+
 </Project>
