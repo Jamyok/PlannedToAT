@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PlannedToAT.Models.StudentModels;
 
 namespace PlannedToAT.Models
 {

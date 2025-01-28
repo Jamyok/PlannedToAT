@@ -21,9 +21,6 @@ namespace PlannedToAT.Models.StudentModels
         [Required(ErrorMessage = "Race/Ethnicity is required")]
         public string? RaceEthnicity { get; set; } // Nullable to avoid constructor warning
 
-        [Phone(ErrorMessage = "Invalid phone number format")]
-        public string? PhoneNumber { get; set; }
-
         [EmailAddress(ErrorMessage = "Invalid email address format")]
         public string? EmailAddress { get; set; }
 
@@ -36,13 +33,7 @@ namespace PlannedToAT.Models.StudentModels
 
         [Key]
         public int Id { get; set; } // Assuming the table has a primary key column named Id
-        public string? StudentName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string? RaceEthnicity { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? EmailAddress { get; set; }
-        public string? Institution { get; set; }
-        public string? SubgroupOrTeam { get; set; }
+        
         public string? Esig { get; set;}
     }
 }
