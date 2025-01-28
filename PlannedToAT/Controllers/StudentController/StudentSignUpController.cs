@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PlannedToAT.Models;
 using PlannedToAT.Models.StudentModels;
 
 public class StudentController : Controller
