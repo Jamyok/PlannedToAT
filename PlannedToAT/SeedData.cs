@@ -5,7 +5,7 @@ public static class SeedData
     public static async Task InitializeAsync(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>(); 
+        var userManager = serviceProvider.GetRequiredService<UserManager<PlannedToAT.Models.AdminModels.AdminUser>>(); 
 
         string adminRole = "Admin";
 
@@ -21,7 +21,7 @@ public static class SeedData
 
         if (existingAdmin == null)
         {
-            var adminUser = new AdminUser
+            var adminUser = new PlannedToAT.Models.AdminModels.AdminUser()
             {
                 UserName = "admin",
                 Email = adminEmail,
