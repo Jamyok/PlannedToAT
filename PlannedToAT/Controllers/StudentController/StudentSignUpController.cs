@@ -32,7 +32,7 @@ public class StudentController : Controller
     // The action that handles displaying the student dashboard
     public IActionResult StudentDashboard(string name, DateTime dob, string race, string phone, string email, string institution, string subgroup)
     {
-        var model = new StudentSignUpModel
+        var model = new SignUpStudent
         {
             StudentName = name,
             DateOfBirth = dob,
