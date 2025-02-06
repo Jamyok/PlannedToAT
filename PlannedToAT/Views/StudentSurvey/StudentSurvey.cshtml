@@ -1,0 +1,133 @@
+@model PlannedToAT.Models.StudentSurveyModel
+@{
+    ViewData["Title"] = "Student Survey";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">@ViewData["Title"]</h2>
+        <p class="text-muted text-center">Help us improve by sharing your feedback!</p>
+
+        <div class="progress mb-4">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                70% Completed
+            </div>
+        </div>
+
+        <form asp-controller="StudentSurvey" asp-action="SubmitSurvey" method="post">
+            
+            <div class="card bg-light border-secondary mb-3 p-3">
+    <label asp-for="StudentName" class="form-label fw-bold">
+        Full Name <span class="text-danger">*</span>
+    </label>
+    <input asp-for="StudentName" class="form-control border-primary" placeholder="Enter your full name" required />
+</div>
+
+<div class="card bg-light border-secondary mb-3 p-3">
+    <label asp-for="Email" class="form-label fw-bold">
+        Email Address <span class="text-danger">*</span>
+    </label>
+    <input asp-for="Email" class="form-control border-primary" type="email" placeholder="Enter your email" required />
+</div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label asp-for="ProgramExperience" class="form-label fw-bold">Describe your experience in the program</label>
+                <textarea asp-for="ProgramExperience" class="form-control border-success" rows="3" placeholder="Write your experience..." required></textarea>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label class="form-label fw-bold">Overall, how satisfied are you with the program?</label>
+                <div class="form-check">
+                    <input type="radio" asp-for="Satisfaction" value="Very Satisfied" class="form-check-input" id="satisfied1" />
+                    <label class="form-check-label" for="satisfied1">Very Satisfied</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Satisfaction" value="Satisfied" class="form-check-input" id="satisfied2" />
+                    <label class="form-check-label" for="satisfied2">Satisfied</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Satisfaction" value="Neutral" class="form-check-input" id="satisfied3" />
+                    <label class="form-check-label" for="satisfied3">Neutral</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Satisfaction" value="Dissatisfied" class="form-check-input" id="satisfied4" />
+                    <label class="form-check-label" for="satisfied4">Dissatisfied</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Satisfaction" value="Very Dissatisfied" class="form-check-input" id="satisfied5" />
+                    <label class="form-check-label" for="satisfied5">Very Dissatisfied</label>
+                </div>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label class="form-label fw-bold">Which topics did you find most useful? (Select all that apply)</label>
+                <div class="row">
+                    @foreach (var topic in Model.UsefulTopics)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-check bg-white p-2 rounded shadow-sm">
+                                <input type="checkbox" class="form-check-input" name="SelectedTopics" value="@topic.Value">
+                                <label class="form-check-label">@topic.Text</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label asp-for="ConfidenceLevel" class="form-label fw-bold">
+                    On a scale from 1 to 10, how confident are you in managing finances?
+                </label>
+                <div class="d-flex align-items-center">
+                    <input asp-for="ConfidenceLevel" type="range" min="1" max="10" class="form-range border-warning" 
+                           id="confidenceRange" required oninput="updateConfidenceValue(this.value)" />
+                    <span class="ms-2 fw-bold text-primary" id="confidenceValue">5</span>
+                </div>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label class="form-label fw-bold">How was your interaction with peers?</label>
+                <textarea asp-for="PeerInteraction" class="form-control border-info" rows="2" placeholder="Describe your peer interactions..." required></textarea>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label class="form-label fw-bold">How was your interaction with mentors?</label>
+                <textarea asp-for="MentorInteraction" class="form-control border-info" rows="2" placeholder="Describe your mentor interactions..." required></textarea>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label asp-for="MentorshipExperience" class="form-label fw-bold">Share any feedback on mentorship</label>
+                <textarea asp-for="MentorshipExperience" class="form-control border-success" rows="2" placeholder="Mentorship feedback (optional)"></textarea>
+            </div>
+
+            <div class="card bg-light border-secondary mb-3 p-3">
+                <label class="form-label fw-bold">Would you recommend this program?</label>
+                <div class="d-flex justify-content-start gap-3">
+                    <div>
+                        <input type="radio" asp-for="WouldRecommend" value="Yes" class="btn-check" id="recYes" required>
+                        <label class="btn btn-outline-success px-4 py-2" for="recYes">✅ Yes</label>
+                    </div>
+                    <div>
+                        <input type="radio" asp-for="WouldRecommend" value="No" class="btn-check" id="recNo">
+                        <label class="btn btn-outline-danger px-4 py-2" for="recNo">❌ No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-primary">📩 Submit Survey</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateConfidenceValue(value) {
+        document.getElementById("confidenceValue").innerText = value;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let slider = document.getElementById("confidenceRange");
+        document.getElementById("confidenceValue").innerText = slider.value;
+    });
+</script>

@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Survey Submitted";
+}
+
+<div class="container mt-5">
+    <div class="card bg-light shadow-lg p-4 text-center border-success">
+        <h2 class="text-success">✅ Survey Submitted Successfully!</h2>
+        <p class="text-muted">Thank you for your feedback. Your responses have been recorded.</p>
+        
+        <div class="mt-4">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary">🏠 Return to Home</a>
+        </div>
+    </div>
+</div>
