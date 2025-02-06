@@ -28,6 +28,11 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
+
+        public IActionResult StudentSurvey()
+        {
+            return View();
+        }
         public IActionResult SignUpStudent()
         {
             return View();
