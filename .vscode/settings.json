@@ -15,7 +15,7 @@
             "name": "Local",
             "database": "mysql",
             "username": "root",
-            "password": "Moses.123"
+            "password": "Moses.123"      
         }
     ]
 }
