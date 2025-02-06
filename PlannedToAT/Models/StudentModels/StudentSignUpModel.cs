@@ -1,10 +1,8 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PlannedToAT.Models
+namespace PlannedToAT.Models.StudentModels
 {
-   [Table("studentinputforms")]
     public class SignUpStudent
     {
 
@@ -14,20 +12,20 @@ namespace PlannedToAT.Models
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        public string? StudentName { get; set; }
+        public string? StudentName { get; set; } // Nullable to allow for uninitialized state
 
         [Required(ErrorMessage = "Date of Birth is required")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Race/Ethnicity is required")]
-        public string? RaceEthnicity { get; set; }
+        public string? RaceEthnicity { get; set; } // Nullable to avoid constructor warning
 
         [EmailAddress(ErrorMessage = "Invalid email address format")]
         public string? EmailAddress { get; set; }
 
         [Required(ErrorMessage = "Institution/School/Youth Group is required")]
-        public string? Institution { get; set; }
+        public string? Institution { get; set; } // Nullable to avoid constructor warning
 
         public string? SubgroupOrTeam { get; set; }
 
@@ -35,13 +33,7 @@ namespace PlannedToAT.Models
 
         [Key]
         public int Id { get; set; } // Assuming the table has a primary key column named Id
-        public string? StudentName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string? RaceEthnicity { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? EmailAddress { get; set; }
-        public string? Institution { get; set; }
-        public string? SubgroupOrTeam { get; set; }
+        
         public string? Esig { get; set;}
     }
 }

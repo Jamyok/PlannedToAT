@@ -1,3 +1,5 @@
+@model PlannedToAT.Models.StudentModels.SignUpStudent
+
 @{
     ViewData["Title"] = "Student Dashboard";
 }
@@ -120,15 +122,12 @@
     <div class="dashboard-container">
         <!-- Header Section -->
         <div class="header">
-            <div class="logo">Student Dashboard</div>
-            <nav class="nav">
+            <div class="logo">Logo</div>
+            <div class="nav">
                 <a href="#">Dashboard</a>
                 <a href="#">Forms</a>
                 <a href="#">Profile</a>
-            </nav>
-            <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
-                <button type="submit" class="logout-button">Logout</button>
-            </form>
+            </div>
         </div>
 
         <!-- Welcome Message -->

@@ -1,7 +1,10 @@
 {
+<<<<<<< HEAD
+=======
     "files.readonlyInclude": {
         "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true
     },
+>>>>>>> master
     "sqltools.connections": [
         {
             "mysqlOptions": {
@@ -9,6 +12,15 @@
                 "enableSsl": "Disabled"
             },
             "previewLimit": 50,
+<<<<<<< HEAD
+            "server": "plannedtoatscus.mysql.database.azure.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Azure PlannedToAT",
+            "database": "plannedtoat",
+            "username": "Jamy",
+            "password": "Faye2011"
+=======
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
@@ -16,6 +28,7 @@
             "database": "mysql",
             "username": "root",
             "password": "Moses.123"      
+>>>>>>> master
         }
     ]
 }

@@ -1,8 +1,8 @@
 @model PlannedToAT.Models.AdminModels.AdminInputFormModel
-
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,24 +117,18 @@
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         </div>
-
         <!-- Welcome Message -->
         <div class="welcome-message">
             Welcome, @Model.FirstName!
         </div>
-
-        <!-- Metrics Section -->
-    <div class="metrics">
+            <div class="metrics">
         <div class="box">
-            <h3>Total Users Over Time</h3>
             <div id="usersChart1" style="width:100%; height:400px;"></div>
         </div>
         <div class="box">
-            <h3>New Users Per Month</h3>
             <div id="usersChart2" style="width:100%; height:400px;"></div>
         </div>
         <div class="box">
-            <h3>Forms Status</h3>
             <div id="usersChart3" style="width:100%; height:400px;"></div>
         </div>
     </div>

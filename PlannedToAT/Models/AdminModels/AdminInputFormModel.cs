@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PlannedToAT.Models
+namespace PlannedToAT.Models.AdminModels
 {
     public class AdminInputFormModel
     {
-        [Key] // Define a dedicated primary key
+        [Key] 
         public int Id { get; set; }
 
         [Required]
