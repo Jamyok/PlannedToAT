@@ -1,5 +1,4 @@
 @model PlannedToAT.Models.AdminModels.AdminInputFormModel
-
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
@@ -9,6 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>@ViewData["Title"]</title>
     <style>
         body {
@@ -109,39 +110,74 @@
             <nav class="nav">
                 <a href="@Url.Action("Index", "Admin")">Dashboard</a>
                 <a href="@Url.Action("Users", "Admin")">Users</a>
-                <a href="@Url.Action("Reports", "Admin")">Reports</a>
+                <a href="@Url.Action("AdminReports", "Home")">Reports</a>
                 <a href="@Url.Action("Settings", "Admin")">Settings</a>
             </nav>
             <form asp-controller="AdminInput" asp-action="Logout" method="post" style="display:inline;">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         </div>
-
         <!-- Welcome Message -->
         <div class="welcome-message">
             Welcome, @Model.FirstName!
         </div>
-
-        <!-- Metrics Section -->
-        <div class="metrics">
-            <!-- Graph 1 -->
-            <div class="box">
-                <h3>Total Users</h3>
-                <p>1,237</p>
-            </div>
-            <!-- Graph 2 -->
-            <div class="box">
-                <h3>Graph</h3>
-                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F37490420%2Fhow-to-create-a-placeholder-for-empty-factor-levels-on-a-bar-chart-axis-using-gg&psig=AOvVaw2Ga4aQivpzn5i_ZCbXlqtS&ust=1733626517516000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIj955nUlIoDFQAAAAAdAAAAABAE" alt="Graph 2">
-                <p>Data Visualization</p>
-            </div>
-            <!-- Graph 3 -->
-            <div class="box">
-                <h3>Graph 2</h3>
-                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F16954194%2Fflot-axis-labels-monthnames-wrongly-ordered&psig=AOvVaw2Ga4aQivpzn5i_ZCbXlqtS&ust=1733626517516000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIj955nUlIoDFQAAAAAdAAAAABAQ" alt="Graph 3">
-                <p>Data Visualization</p>
-            </div>
+            <div class="metrics">
+        <div class="box">
+            <div id="usersChart1" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="box">
+            <div id="usersChart2" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="box">
+            <div id="usersChart3" style="width:100%; height:400px;"></div>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        //chart1
+        Highcharts.chart('usersChart1', {
+            chart: { type: 'column' },
+            title: { text: 'User Growth Per Year' },
+            xAxis: { 
+                categories: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                title: { text: 'Year' }
+            },
+            yAxis: { title: { text: 'Total Users' } },
+            series: [{ 
+                name: 'Users', 
+                data: [10, 50, 150, 300, 500, 750] // Dummy data
+            }]
+        });
+        //chart2
+        Highcharts.chart('usersChart2', {
+            chart: { type: 'line' },
+            title: { text: 'New Users Per Month' },
+            xAxis: { 
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                title: { text: 'Month' }
+            },
+            yAxis: { title: { text: 'New Users' } },
+            series: [{ 
+                name: 'New Users', 
+                data: [0, 5, 10, 15, 20, 25] // Dummy data
+            }]
+        });
+        //chart3
+        Highcharts.chart('usersChart3', {
+            chart: { type: 'pie'},
+            title: { text: 'Form Status'},
+            series: [{
+                name:'Forms',
+                colorByPoint: true,
+                data: [
+                    {name: 'Completed', y: 60, color: '#2ecc71'},
+                    {name: 'In Progress', y:25, color:'#f1c40f'},
+                    {name: 'Not Started', y: 15, color:'#e74c3c'}
+                ]
+            }]
+        })
+    });
+    </script>       
+</div>
 </body>
 </html>

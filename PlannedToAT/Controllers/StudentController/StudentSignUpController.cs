@@ -45,7 +45,6 @@ public class StudentController : Controller
         
         return View("~/Views/StudentViews/StudentDashboard.cshtml", model);
     }
-
     public IActionResult Success()
     {
         return View();
