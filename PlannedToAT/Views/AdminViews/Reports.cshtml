@@ -1,10 +1,12 @@
+@model IEnumerable<PlannedToAT.Models.AdminModels.ReportData>
+
 @{
-    ViewData["Title"] = "Admin Reports";
+    ViewData["Title"] = ViewData["ReportTitle"] ?? "Admin Reports";
 }
 
 <h2>Admin Reports</h2>
 
-<form asp-action="AdminReports" method="post">
+<form asp-controller="Report" asp-action="Reports" method="post">
     <div>
         <label for="reportSelection">Choose a report:</label>
         <select id="reportSelection" name="reportSelection" required>
@@ -19,19 +21,15 @@
 
 <hr />
 
-@if (ViewBag.ReportType != null)
+@if (ViewData["ReportTitle"] != null)
 {
-    <h3>Report: @ViewBag.ReportTitle</h3>
+    <h3>@ViewData["ReportTitle"]</h3>
 
-    @if (ViewBag.ReportType == "TotalStudents")
+    @if (ViewData["ReportTitle"].ToString() == "Total Number of Students")
     {
-        <p>Total number of students: @ViewBag.TotalStudents</p>
+        <p>Total students: @ViewData["ReportData"]</p>
     }
-    else if (ViewBag.ReportType == "StudentsWithBankAccounts")
-    {
-        <p>Number of students with bank accounts: @ViewBag.StudentsWithBankAccounts</p>
-    }
-    else if (ViewBag.ReportType == "StudentDetails")
+    else if (Model != null && Model.Any())
     {
         <table>
             <thead>
@@ -45,18 +43,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var student in ViewBag.StudentDetails)
+                @foreach (var student in Model)
                 {
                     <tr>
                         <td>@student.FirstName</td>
                         <td>@student.LastName</td>
                         <td>@student.School</td>
                         <td>@student.Organization</td>
-                        <td>@student.GraduatingYear</td>
-                        <td>@(student.HasBankAccount ? "Yes" : "No")</td>
+                        <td>@(student.GraduatingYear?.ToString() ?? "N/A")</td>
+                        <td>@(student.HasBankAccount == true ? "Yes" : "No")</td>
                     </tr>
                 }
             </tbody>
         </table>
     }
+    else
+    {
+        <p>No data available for the selected report.</p>
+    }
 }
+
+<p><strong>Report generated on:</strong> @ViewData["ReportDate"]</p>

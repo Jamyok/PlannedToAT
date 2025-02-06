@@ -1,5 +1,35 @@
 {
     "files.readonlyInclude": {
         "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true
-    }
+    },
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "password": "password123",
+            "database": "PlannedToAT",
+            "name": "PlannedToAT",
+            "username": "root"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "plannedtoatscus.mysql.database.azure.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "AzurePlannedToAT",
+            "database": "PlannedToAT",
+            "username": "Jamy",
+            "password": "Faye2011"
+        }
+    ]
 }

@@ -36,7 +36,7 @@ namespace PlannedToAT.Controllers
         //change this later
         public IActionResult AdminReports()
         {
-            return View();
+            return RedirectToAction("Reports", "AdminViews");
         }
         public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
         {
@@ -73,7 +73,7 @@ namespace PlannedToAT.Controllers
 
          public IActionResult Admin()
         {
-            return View();
+            return View("/Views/Admin/Admin.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
