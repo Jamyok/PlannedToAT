@@ -1,16 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // db builder for MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseMySql(connectionString,
         new MySqlServerVersion(new Version(8, 0, 32))));
 
 // Add services to the container.
