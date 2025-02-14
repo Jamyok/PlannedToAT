@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PlannedToAT.Models;
 using PlannedToAT.Models.StudentModels;
 
 public class StudentController : Controller
@@ -11,7 +10,7 @@ public class StudentController : Controller
     }
 
     [HttpPost]
-    public IActionResult SubmitStudentData(StudentSignUpModel studentData)
+    public IActionResult SubmitStudentData(SignUpStudent studentData)
     {
         if (ModelState.IsValid)
         {
@@ -24,7 +23,7 @@ public class StudentController : Controller
     }
 
     // This method serves the SignUpStudent form, now redirecting to the correct view
-    public IActionResult SignUpStudent(StudentSignUpModel model)
+    public IActionResult SignUpStudent(SignUpStudent model)
     {
         return View("~/Views/StudentViews/SignUpStudent.cshtml");
     }
@@ -42,7 +41,7 @@ public class StudentController : Controller
             Institution = institution,
             SubgroupOrTeam = subgroup
         };
-        
+
         return View("~/Views/StudentViews/StudentDashboard.cshtml", model);
     }
     public IActionResult Success()

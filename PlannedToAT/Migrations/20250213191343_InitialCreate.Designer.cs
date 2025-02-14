@@ -12,7 +12,7 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250120193913_InitialCreate")]
+    [Migration("20250213191343_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace PlannedToAT.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -157,7 +157,7 @@ namespace PlannedToAT.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PlannedToAT.Data.ApplicationUser", b =>
+            modelBuilder.Entity("PlannedToAT.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -225,7 +225,7 @@ namespace PlannedToAT.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PlannedToAT.Models.SignUpStudent", b =>
+            modelBuilder.Entity("PlannedToAT.Models.StudentModels.SignUpStudent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -236,22 +236,26 @@ namespace PlannedToAT.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("ESig")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("EmailAddress")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Esig")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Institution")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("RaceEthnicity")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("StudentName")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SubgroupOrTeam")
@@ -259,7 +263,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("studentinputforms");
+                    b.ToTable("SignUpStudents");
                 });
 
             modelBuilder.Entity("StudentManagementApp.Models.StudentData", b =>
@@ -322,7 +326,7 @@ namespace PlannedToAT.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("PlannedToAT.Data.ApplicationUser", null)
+                    b.HasOne("PlannedToAT.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -331,7 +335,7 @@ namespace PlannedToAT.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("PlannedToAT.Data.ApplicationUser", null)
+                    b.HasOne("PlannedToAT.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -346,7 +350,7 @@ namespace PlannedToAT.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PlannedToAT.Data.ApplicationUser", null)
+                    b.HasOne("PlannedToAT.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -355,7 +359,7 @@ namespace PlannedToAT.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("PlannedToAT.Data.ApplicationUser", null)
+                    b.HasOne("PlannedToAT.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
