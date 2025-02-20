@@ -7,7 +7,6 @@ using System.Collections.Generic;
 namespace AdminUser.Controllers
 {
     public class AdminInputController : Controller
-
     {
         // Display the Admin sign-up form (GET method)
         public IActionResult Admin()
@@ -89,17 +88,19 @@ namespace AdminUser.Controllers
         {
             return View("~/Views/AdminViews/SurveyUpdateSuccess.cshtml");
         }
+
+        // ================================
+        // 🚀 Survey Form Logic
+        // ================================
+
+        // Display the Survey Form page
+        public IActionResult SurveyForm()
+        {
+            return View("~/Views/AdminViews/SurveyForm.cshtml");
+        }
     }
 
     //[Authorize(Roles = "Admin")]
-    public class AdminDashboardController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
-    [Authorize(Roles = "Admin")]
     public class AdminDashboardController : Controller
     {
         public IActionResult Index()

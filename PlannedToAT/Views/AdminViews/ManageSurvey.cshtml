@@ -1,0 +1,81 @@
+@model PlannedToAT.Models.SurveyManagementModel
+@{
+    ViewData["Title"] = "Manage Student Survey";
+}
+
+<div class="container mt-5">
+    <div class="card bg-light shadow-lg p-4 border-primary">
+        <h2 class="text-center text-primary">🛠 Manage Student Survey</h2>
+        <p class="text-muted text-center">Add, remove, or modify survey questions</p>
+
+        <form asp-controller="Admin" asp-action="SaveSurveyChanges" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Edit Survey Title</label>
+                <input asp-for="SurveyTitle" class="form-control border-primary" required />
+            </div>
+
+            <div id="questionsContainer">
+                @for (var i = 0; i < Model.Questions.Count; i++)
+                {
+                    <div class="card p-3 mb-3 border-secondary">
+                        <label class="form-label fw-bold">Question @(i + 1)</label>
+                        <input asp-for="Questions[i].Text" class="form-control border-secondary" required />
+
+                        <label class="form-label mt-2">Question Type</label>
+                        <select asp-for="Questions[i].Type" class="form-select border-secondary">
+                            <option value="Text">Short Answer</option>
+                            <option value="Textarea">Paragraph</option>
+                            <option value="Radio">Multiple Choice (Single Answer)</option>
+                            <option value="Checkbox">Multiple Choice (Multiple Answers)</option>
+                        </select>
+
+                        <div class="mt-2">
+                            <label class="form-label">Options (for multiple choice only)</label>
+                            <input asp-for="Questions[i].Options" class="form-control border-secondary" placeholder="Comma-separated (e.g., Yes, No, Maybe)" />
+                        </div>
+
+                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeQuestion(this)">🗑 Remove</button>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn btn-success mb-3" onclick="addQuestion()">➕ Add Question</button>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-primary">💾 Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function addQuestion() {
+        let index = document.querySelectorAll("#questionsContainer .card").length;
+        let questionHtml = `
+            <div class="card p-3 mb-3 border-secondary">
+                <label class="form-label fw-bold">Question ${index + 1}</label>
+                <input name="Questions[${index}].Text" class="form-control border-secondary" required />
+
+                <label class="form-label mt-2">Question Type</label>
+                <select name="Questions[${index}].Type" class="form-select border-secondary">
+                    <option value="Text">Short Answer</option>
+                    <option value="Textarea">Paragraph</option>
+                    <option value="Radio">Multiple Choice (Single Answer)</option>
+                    <option value="Checkbox">Multiple Choice (Multiple Answers)</option>
+                </select>
+
+                <div class="mt-2">
+                    <label class="form-label">Options (for multiple choice only)</label>
+                    <input name="Questions[${index}].Options" class="form-control border-secondary" placeholder="Comma-separated (e.g., Yes, No, Maybe)" />
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeQuestion(this)">🗑 Remove</button>
+            </div>`;
+        
+        document.getElementById("questionsContainer").insertAdjacentHTML('beforeend', questionHtml);
+    }
+
+    function removeQuestion(button) {
+        button.closest('.card').remove();
+    }
+</script>
