@@ -1,0 +1,17 @@
+@model PlannedToAT.Models.SurveyManagementModel
+@{
+    ViewData["Title"] = "Survey Updated Successfully";
+}
+
+<div class="container mt-5 text-center">
+    <div class="card bg-light shadow-lg p-4 border-success">
+        <h2 class="text-success">✅ Survey Updated Successfully!</h2>
+        <p class="text-muted">Your survey changes have been saved.</p>
+
+        <div class="mt-4">
+            <a asp-controller="AdminInput" asp-action="ManageSurvey" class="btn btn-primary">🔙 Back to Survey Management</a>
+            <a asp-controller="StudentSurvey" asp-action="ViewUpdatedSurvey" class="btn btn-secondary">📋 View Updated Survey</a>
+            <a asp-controller="Home" asp-action="AdminDashboard" class="btn btn-secondary">🏠 Return to Dashboard</a>
+        </div>
+    </div>
+</div>

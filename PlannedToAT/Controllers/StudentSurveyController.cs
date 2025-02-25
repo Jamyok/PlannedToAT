@@ -1,38 +1,67 @@
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PlannedToAT.Controllers
 {
     public class StudentSurveyController : Controller
     {
-        [HttpGet]
-        public IActionResult StudentSurvey()
+        private static SurveyManagementModel _currentSurvey = new SurveyManagementModel
         {
-            return View(new StudentSurveyModel());
-        }
+            SurveyTitle = "Student Feedback Survey",
+            Questions = new List<SurveyQuestion>
+            {
+                new SurveyQuestion { Text = "How would you rate the program?", Type = "Radio", Options = "Excellent,Good,Neutral,Poor" },
+                new SurveyQuestion { Text = "What did you find most valuable?", Type = "Textarea" },
+                new SurveyQuestion { Text = "Would you recommend this program?", Type = "Radio", Options = "Yes,No" }
+            }
+        };
 
         [HttpPost]
-        public IActionResult SubmitSurvey(StudentSurveyModel model, List<string> SelectedTopics)
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateSurvey(SurveyManagementModel model)
+        {
+            if (model == null)
+            {
+                return NotFound("Survey data not provided.");
+            }
+
+            // Update the static survey model
+            _currentSurvey = model;
+
+            // Redirect to a success page
+            return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
+        }
+
+        public IActionResult Index()
+        {
+            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+        }
+
+        // Display the updated student survey
+        public IActionResult ViewUpdatedSurvey()
+        {
+            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+        }
+
+        // Handle student survey submissions
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitSurvey(StudentSurveyResponseModel response)
         {
             if (ModelState.IsValid)
             {
-                // Store selected topics into model
-                model.UsefulTopics = model.UsefulTopics?
-                    .Where(t => SelectedTopics.Contains(t.Value))
-                    .ToList();
-
-                // Process and save survey responses
-                return RedirectToAction("SurveySuccess");
+                // Logic to save student responses (e.g., database storage, logging, etc.)
+                return RedirectToAction("SurveySubmitted");
             }
 
-            return View("StudentSurvey", model);
+            return View("~/Views/StudentSurvey/SurveySuccess.cshtml", _currentSurvey);
         }
 
-        public IActionResult SurveySuccess()
+        // Success page after submission
+        public IActionResult SurveySubmitted()
         {
-            return View();
+            return View("~/Views/StudentSurvey/SurveySuccess.cshtml");
         }
     }
 }
