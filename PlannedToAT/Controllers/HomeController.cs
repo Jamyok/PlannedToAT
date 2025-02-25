@@ -40,7 +40,7 @@ namespace PlannedToAT.Controllers
         }
         public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
         {
-            var model = new StudentSignUpModel
+            var model = new SignUpStudent
             {
                 StudentName = studentName,
                 DateOfBirth = dob,
@@ -90,7 +90,7 @@ namespace PlannedToAT.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-         public IActionResult Admin()
+        public IActionResult Admin()
         {
             return View();
         }
@@ -100,5 +100,11 @@ namespace PlannedToAT.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
     }
 }

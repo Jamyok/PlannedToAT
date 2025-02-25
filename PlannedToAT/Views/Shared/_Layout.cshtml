@@ -60,5 +60,16 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+<!-- for when when get roles working -->
+
+@* @if (User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Admin Dashboard</a>
+    </li>
+} *@
+
+
 </body>
 </html>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace AdminUser.Controllers
 {
     public class AdminInputController : Controller
+
     {
         private static SurveyManagementModel _surveyModel = new SurveyManagementModel
         {
@@ -107,6 +108,14 @@ namespace AdminUser.Controllers
         }
     }
 
+    public class AdminDashboardController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+    [Authorize(Roles = "Admin")]
     public class AdminDashboardController : Controller
     {
         public IActionResult Index()
