@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json; // Required for TempData serialization
 using PlannedToAT.Models.StudentModels;
 
 public class StudentController : Controller
@@ -10,40 +11,34 @@ public class StudentController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult SubmitStudentData(SignUpStudent studentData)
     {
         if (ModelState.IsValid)
         {
-            // After successful form submission, redirect to the StudentDashboard action
-            return RedirectToAction("StudentDashboard", "Student", new { name = studentData.StudentName, dob = studentData.DateOfBirth, race = studentData.RaceEthnicity, phone = studentData.PhoneNumber, email = studentData.EmailAddress, institution = studentData.Institution, subgroup = studentData.SubgroupOrTeam });
+            TempData["StudentData"] = JsonConvert.SerializeObject(studentData);
+            return RedirectToAction("StudentDashboard");
         }
 
-        // Return to the form with data if the model is invalid
         return View("StudentForm", studentData);
     }
 
-    // This method serves the SignUpStudent form, now redirecting to the correct view
-    public IActionResult SignUpStudent(SignUpStudent model)
+    public IActionResult SignUpStudent()
     {
-        return View("~/Views/StudentViews/SignUpStudent.cshtml");
+        return View();
     }
 
-    // The action that handles displaying the student dashboard
-    public IActionResult StudentDashboard(string name, DateTime dob, string race, string phone, string email, string institution, string subgroup)
+    public IActionResult StudentDashboard()
     {
-        var model = new SignUpStudent
+        if (TempData["StudentData"] is string studentJson)
         {
-            StudentName = name,
-            DateOfBirth = dob,
-            RaceEthnicity = race,
-            PhoneNumber = phone,
-            EmailAddress = email,
-            Institution = institution,
-            SubgroupOrTeam = subgroup
-        };
+            var model = JsonConvert.DeserializeObject<SignUpStudent>(studentJson);
+            return View("~/Views/StudentViews/StudentDashboard.cshtml", model);
+        }
 
-        return View("~/Views/StudentViews/StudentDashboard.cshtml", model);
+        return RedirectToAction("StudentForm");
     }
+
     public IActionResult Success()
     {
         return View();

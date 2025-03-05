@@ -1,5 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Authorization;
+using PlannedToAT.Data;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,12 +19,32 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add Identity services
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
         // Add custom view location
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
     });
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>(); 
+});
+
+
+
 
 var app = builder.Build();
 
@@ -34,7 +60,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.RoutePrefix = "swagger";
+});
+
+
+
 
 // Default route for the application
 app.MapControllerRoute(
@@ -45,6 +83,17 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "admin",
     pattern: "Admin/{action=Index}/{id?}",
-    defaults: new { controller = "AdminInput" });
+     defaults: new { controller = "AdminInput" })
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });//require admin 
+app.MapIdentityApi<PlannedToAT.Models.AdminUser>();
+
+// Route specifically for Student actions
+app.MapControllerRoute(
+    name: "student",
+    pattern: "Student/{action=Index}/{id?}",
+     defaults: new { controller = "StudentInput" })
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "StudentUser" });//require Student
+
+
 
 app.Run();

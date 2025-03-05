@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Collections.Generic;
@@ -5,6 +6,7 @@ using System.Linq;
 
 namespace PlannedToAT.Controllers
 {
+    [Authorize(Roles = "StudentUser")]
     public class StudentSurveyController : Controller
     {
         [HttpGet]
@@ -14,16 +16,22 @@ namespace PlannedToAT.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitSurvey(StudentSurveyModel model, List<string> SelectedTopics)
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitSurvey(StudentSurveyModel model, List<string>? SelectedTopics)
         {
             if (ModelState.IsValid)
             {
-                // Store selected topics into model
-                model.UsefulTopics = model.UsefulTopics?
-                    .Where(t => SelectedTopics.Contains(t.Value))
-                    .ToList();
+                // Ensure SelectedTopics is not null before filtering
+                if (SelectedTopics != null && model.UsefulTopics != null)
+                {
+                    model.UsefulTopics = model.UsefulTopics
+                        .Where(t => SelectedTopics.Contains(t.Value))
+                        .ToList();
+                }
 
-                // Process and save survey responses
+                // Simulating data persistence using TempData (replace with database logic)
+                TempData["SurveyData"] = Newtonsoft.Json.JsonConvert.SerializeObject(model);
+
                 return RedirectToAction("SurveySuccess");
             }
 
@@ -32,6 +40,12 @@ namespace PlannedToAT.Controllers
 
         public IActionResult SurveySuccess()
         {
+            if (TempData["SurveyData"] is string surveyJson)
+            {
+                var model = Newtonsoft.Json.JsonConvert.DeserializeObject<StudentSurveyModel>(surveyJson);
+                return View(model);
+            }
+
             return View();
         }
     }
