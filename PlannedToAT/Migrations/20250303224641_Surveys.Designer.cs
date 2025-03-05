@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlannedToAT.Models;
 
@@ -11,9 +12,11 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250303224641_Surveys")]
+    partial class Surveys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,31 +309,6 @@ namespace PlannedToAT.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SignUpStudents");
-                });
-
-            modelBuilder.Entity("PlannedToAT.Models.StudentSurveyResponseModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Response")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StudentEmail")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StudentSurvey");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.SurveyManagementModel", b =>

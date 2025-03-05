@@ -18,15 +18,15 @@ namespace PlannedToAT.Models
     {
         [Key] 
         public int Id { get; set; }
+        
+        [Required]
         public string Text { get; set; }
 
         [Required]
-        [MinLength(1)]
-        [Display(Name = "Question Type")]
         public string Type { get; set; } // Text, Textarea, Radio, Checkbox
 
-        [Required]
-        [Display(Name = "Options (for multiple choice only)")]
-        public string Options { get; set; } // Comma-separated for multiple-choice
+        public string Options { get; set; } // Remove `[Required]` so it can be null for non-multiple-choice questions
     }
+
+
 }

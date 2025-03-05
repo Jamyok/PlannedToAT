@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
-    public class StudentSurveyController : Controller
+    public class StudentSurveyController(ApplicationDbContext dbContext) : Controller
     {
+        
         private static SurveyManagementModel _currentSurvey = new SurveyManagementModel
         {
             SurveyTitle = "Student Feedback Survey",
@@ -17,7 +18,7 @@ namespace PlannedToAT.Controllers
             }
         };
 
-        [HttpPost]
+       [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateSurvey(SurveyManagementModel model)
         {
@@ -26,12 +27,23 @@ namespace PlannedToAT.Controllers
                 return NotFound("Survey data not provided.");
             }
 
+            foreach (var question in model.Questions)
+            {
+                if (string.IsNullOrWhiteSpace(question.Options) && (question.Type == "Text" || question.Type == "Textarea"))
+                {
+                    question.Options = ""; // Ensure it's not null to prevent MySQL errors
+                }
+            }
+
             // Update the static survey model
             _currentSurvey = model;
 
-            // Redirect to a success page
+            dbContext.Surveys.Add(model);
+            dbContext.SaveChanges();
+
             return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
         }
+
 
         public IActionResult Index()
         {
@@ -47,16 +59,30 @@ namespace PlannedToAT.Controllers
         // Handle student survey submissions
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SubmitSurvey(StudentSurveyResponseModel response)
+        public IActionResult SubmitSurvey(StudentSurveyAnswers response)
         {
-            if (ModelState.IsValid)
+            if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
-                // Logic to save student responses (e.g., database storage, logging, etc.)
-                return RedirectToAction("SurveySubmitted");
+                return BadRequest("No responses provided.");
             }
 
-            return View("~/Views/StudentSurvey/SurveySuccess.cshtml", _currentSurvey);
+            foreach (var entry in response.Responses)
+            {
+                var surveyResponse = new StudentSurveyResponseModel
+                {
+                    StudentEmail = User.Identity.Name, // Assuming the user is logged in
+                    Question = entry.Key,
+                    Response = entry.Value
+                };
+
+                dbContext.StudentSurvey.Add(surveyResponse);
+            }
+
+            dbContext.SaveChanges(); // Persist all responses
+
+            return RedirectToAction("SurveySubmitted");
         }
+
 
         // Success page after submission
         public IActionResult SurveySubmitted()
