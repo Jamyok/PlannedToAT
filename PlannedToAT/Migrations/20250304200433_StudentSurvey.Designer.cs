@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlannedToAT.Models;
 
@@ -11,9 +12,11 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304200433_StudentSurvey")]
+    partial class StudentSurvey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,37 +157,6 @@ namespace PlannedToAT.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-
-            modelBuilder.Entity("PlannedToAT.Models.AdminModels.ReportsModel", b =>
-                {
-                    b.Property<int>("ParticipantID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ParticipantID"));
-
-                    b.Property<string>("Accounts")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<decimal?>("CheckingBalanceStart")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime?>("CheckingStart")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Cohorts")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime(6)");
-
             modelBuilder.Entity("PlannedToAT.Models.AdminModels.AdminInputFormModel", b =>
                 {
                     b.Property<int>("Id")
@@ -197,87 +169,10 @@ namespace PlannedToAT.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ExitTickets")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("FamilyFriends")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<bool?>("HasBankAccount")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<decimal?>("InvestingBalanceStart")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime?>("InvestingStart")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("NeedsWants")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("PhotoPermission")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SMARTGoal")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("SavingGoal")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<decimal?>("SavingsBalanceStart")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime?>("SavingsStart")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("Session2Signup")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("Session3Signup")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("ParticipantID");
-
-                    b.ToTable("ReportData");
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("longtext");

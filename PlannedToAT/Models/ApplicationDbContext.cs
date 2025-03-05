@@ -12,6 +12,11 @@ namespace PlannedToAT.Models
         // DbSet properties for your models
         public DbSet<SignUpStudent> SignUpStudents { get; set; }
         public DbSet<StudentData> Students { get; set; }
+        public DbSet<SurveyManagementModel> Surveys { get; set; }
+
+        public DbSet<AdminInputFormModel> AdminSignUp { get; set; }
+
+        public DbSet<StudentSurveyResponseModel> StudentSurvey { get; set; }
 
         public DbSet<ReportsModel> ReportData { get; set;} 
 
