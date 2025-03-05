@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlannedToAT.Models;
 
@@ -11,9 +12,11 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228183303_CsvImportFromOldData")]
+    partial class CsvImportFromOldData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,6 @@ namespace PlannedToAT.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-
             modelBuilder.Entity("PlannedToAT.Models.AdminModels.ReportsModel", b =>
                 {
                     b.Property<int>("ParticipantID")
@@ -184,19 +186,6 @@ namespace PlannedToAT.Migrations
 
                     b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime(6)");
-
-            modelBuilder.Entity("PlannedToAT.Models.AdminModels.AdminInputFormModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConfirmPassword")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -278,33 +267,6 @@ namespace PlannedToAT.Migrations
                     b.HasKey("ParticipantID");
 
                     b.ToTable("ReportData");
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SecurityAnswer")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SecurityQuestion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AdminSignUp");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.ApplicationUser", b =>
@@ -416,78 +378,6 @@ namespace PlannedToAT.Migrations
                     b.ToTable("SignUpStudents");
                 });
 
-            modelBuilder.Entity("PlannedToAT.Models.StudentSurveyResponseModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Response")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StudentEmail")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StudentSurvey");
-                });
-
-            modelBuilder.Entity("PlannedToAT.Models.SurveyManagementModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("SurveyTitle")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Surveys");
-                });
-
-            modelBuilder.Entity("PlannedToAT.Models.SurveyQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Options")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("SurveyManagementModelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyManagementModelId");
-
-                    b.ToTable("SurveyQuestion");
-                });
-
             modelBuilder.Entity("StudentManagementApp.Models.StudentData", b =>
                 {
                     b.Property<int>("StudentId")
@@ -586,18 +476,6 @@ namespace PlannedToAT.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PlannedToAT.Models.SurveyQuestion", b =>
-                {
-                    b.HasOne("PlannedToAT.Models.SurveyManagementModel", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("SurveyManagementModelId");
-                });
-
-            modelBuilder.Entity("PlannedToAT.Models.SurveyManagementModel", b =>
-                {
-                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

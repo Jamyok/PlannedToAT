@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
+using PlannedToAT.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString,
-        new MySqlServerVersion(new Version(8, 0, 32))));
+        new MySqlServerVersion(new Version(8, 0, 40))));
+
+builder.Services.AddScoped<CsvImportService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
