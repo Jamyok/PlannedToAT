@@ -1,4 +1,143 @@
-@model PlannedToAT.Models.AdminModels.AdminInputFormModel
+@model IEnumerable<PlannedToAT.Models.AdminModels.ReportsModel>
 
-<h2>View Reports</h2>
-<p>Here the admin can view various reports.</p>
+@{
+    ViewData["Title"] = ViewData["ReportTitle"] ?? "Admin Reports";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 30px;
+            background-color: #2d3e50;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .nav a:hover {
+            background-color: #1f2d3d;
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="logo">Admin Reports</div>
+            <nav class="nav">
+                <a href="@Url.Action("Index", "Admin")">Dashboard</a>
+                <a href="@Url.Action("Users", "Admin")">Users</a>
+                <a href="@Url.Action("Reports", "Reports")">Reports</a>
+                <a href="@Url.Action("Settings", "Admin")">Settings</a>
+            </nav>
+            <form asp-controller="AdminInput" asp-action="Logout" method="post" style="display:inline;">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+
+        <h2>Admin Reports</h2>
+
+        <form asp-controller="Reports" asp-action="Reports" method="post">
+            <div>
+                <label for="reportSelection">Choose a report:</label>
+                <select id="reportSelection" name="reportSelection" required>
+                    <option value="">Select a report</option>
+                    <option value="StudentsWithBankAccounts">Students with Bank Accounts</option>
+                    <option value="StudentDetails">Student Details</option>
+                    <option value="TotalStudents">Total Number of Students</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <hr />
+
+        @if (ViewData["ReportTitle"] != null)
+        {
+            <h3>@ViewData["ReportTitle"]</h3>
+
+            @if (ViewData["ReportTitle"].ToString() == "Total Number of Students")
+            {
+                <p>Total students: @ViewData["ReportData"]</p>
+            }
+            else if (Model != null && Model.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>State</th>
+                            <th>Has Bank Account</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td>@student.FirstName</td>
+                                <td>@student.LastName</td>
+                                <td>@student.State</td>
+                                <td>@(student.HasBankAccount == true ? "Yes" : "No")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No data available for the selected report.</p>
+            }
+        }
+
+        <p><strong>Report generated on:</strong> @ViewData["ReportDate"]</p>
+    </div>
+</body>
+</html>
