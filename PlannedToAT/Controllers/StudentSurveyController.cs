@@ -4,9 +4,15 @@ using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
-    public class StudentSurveyController(ApplicationDbContext dbContext) : Controller
+    public class StudentSurveyController : Controller
     {
-        
+        private readonly ApplicationDbContext dbContext;
+
+        public StudentSurveyController(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         private static SurveyManagementModel _currentSurvey = new SurveyManagementModel
         {
             SurveyTitle = "Student Feedback Survey",
@@ -18,7 +24,7 @@ namespace PlannedToAT.Controllers
             }
         };
 
-       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateSurvey(SurveyManagementModel model)
         {
@@ -44,7 +50,6 @@ namespace PlannedToAT.Controllers
             return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
         }
 
-
         public IActionResult Index()
         {
             return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
@@ -66,11 +71,26 @@ namespace PlannedToAT.Controllers
                 return BadRequest("No responses provided.");
             }
 
+            // Ensure user is authenticated before saving the survey
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("SurveySuccess", "StudentSurvey");
+            }
+
+            // Retrieve student email
+            string studentEmail = User.Identity.Name;
+
+            // If still null, return an error
+            if (string.IsNullOrEmpty(studentEmail))
+            {
+                return BadRequest("Unable to retrieve student email. Please log in.");
+            }
+
             foreach (var entry in response.Responses)
             {
                 var surveyResponse = new StudentSurveyResponseModel
                 {
-                    StudentEmail = User.Identity.Name, // Assuming the user is logged in
+                    StudentEmail = studentEmail,
                     Question = entry.Key,
                     Response = entry.Value
                 };
@@ -80,12 +100,11 @@ namespace PlannedToAT.Controllers
 
             dbContext.SaveChanges(); // Persist all responses
 
-            return RedirectToAction("SurveySubmitted");
+            return RedirectToAction("SurveySuccess");
         }
 
-
         // Success page after submission
-        public IActionResult SurveySubmitted()
+        public IActionResult SurveySuccess()
         {
             return View("~/Views/StudentSurvey/SurveySuccess.cshtml");
         }
