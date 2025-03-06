@@ -5,16 +5,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Diagnostics;
 using PlannedToAT.Models.StudentModels;
 using PlannedToAT.Models.AdminModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlannedToAT.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -25,6 +28,54 @@ namespace PlannedToAT.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+        
+        public IActionResult Profile()
+        {
+            // Hardcoded student data
+            var model = new SignUpStudent
+            {
+                StudentName = "John Doe",
+                EmailAddress = "johndoe@example.com",
+                PhoneNumber = "1234567890",
+                Institution = "unf",
+                SubgroupOrTeam = "A"
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult UpdateProfile(SignUpStudent model)
+        {
+            TempData["SuccessMessage"] = "Profile updated successfully!";
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult Forms() {
+            ViewData["Layout"] = "_StudentDashboardLayout";
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(string CurrentPassword, string NewPassword, string ConfirmPassword)
+        {
+            // Hardcoded password change simulation
+            string currentPasswordInSystem = "OldPassword123";  // This is the hardcoded current password.
+
+            if (CurrentPassword != currentPasswordInSystem)
+            {
+                TempData["ErrorMessage"] = "Invalid current password!";
+                return RedirectToAction("Profile");
+            }
+
+            if (NewPassword != ConfirmPassword)
+            {
+                TempData["ErrorMessage"] = "Passwords do not match!";
+                return RedirectToAction("Profile");
+            }
+
+            // Assuming the new password change is successful
+            TempData["SuccessMessage"] = "Password changed successfully!";
+            return RedirectToAction("Profile");
         }
 
         // Displays the main sign-up page

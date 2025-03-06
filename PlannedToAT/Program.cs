@@ -2,14 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
 using PlannedToAT.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// db builder for MySQL
+// db builder for MySQL with error resiliency
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString,
-        new MySqlServerVersion(new Version(8, 0, 40))));
+        new MySqlServerVersion(new Version(8, 0, 40)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null) // 🔹 Add retry logic
+    ));
 
 builder.Services.AddScoped<CsvImportService>();
 

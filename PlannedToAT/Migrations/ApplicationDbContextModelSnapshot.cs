@@ -599,7 +599,8 @@ namespace PlannedToAT.Migrations
                 {
                     b.Navigation("Questions");
                 });
+                }
 #pragma warning restore 612, 618
-        }
+            );}
     }
 }

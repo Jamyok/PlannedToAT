@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Student Dashboard";
+    Layout = "_StudentDashboardLayout";
 }
 
 <!DOCTYPE html>
@@ -90,7 +91,7 @@
             border-radius: 8px;
         }
         .logout-button {
-            background-color: #e74c3c;
+            background-color: #a7a5a5;
             color: white;
             padding: 8px 16px;
             border: none;
@@ -99,26 +100,14 @@
             font-size: 16px;
         }
         .logout-button:hover {
-            background-color: #c0392b;
+            background-color: #c9c9c8;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Header Section -->
-        <div class="header">
-            <div class="logo">Student Dashboard</div>
-            <nav class="nav">
-                <a href="#">Dashboard</a>
-                <a href="#">Forms</a>
-                <a href="#">Profile</a>
-            </nav>
-            <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
-                <button type="submit" class="logout-button">Logout</button>
-            </form>
-        </div>
-
-
+    <div class="welcome-message">
+        <h2>Welcome @Model.StudentName</h2>
+    </div>
          <!-- Graphs Section -->
     <div class="metrics">
         <div class="box">
