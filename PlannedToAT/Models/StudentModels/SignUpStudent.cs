@@ -12,7 +12,7 @@ namespace PlannedToAT.Models.StudentModels
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        public string? StudentName { get; set; } // Nullable to allow for uninitialized state
+        public string StudentName { get; set; } // Nullable to allow for uninitialized state
 
         [Required(ErrorMessage = "Date of Birth is required")]
         [DataType(DataType.Date)]
@@ -22,7 +22,7 @@ namespace PlannedToAT.Models.StudentModels
         public string? RaceEthnicity { get; set; } // Nullable to avoid constructor warning
 
         [EmailAddress(ErrorMessage = "Invalid email address format")]
-        public string? EmailAddress { get; set; }
+        public required string EmailAddress { get; set; }
 
         [Required(ErrorMessage = "Institution/School/Youth Group is required")]
         public string? Institution { get; set; } // Nullable to avoid constructor warning
