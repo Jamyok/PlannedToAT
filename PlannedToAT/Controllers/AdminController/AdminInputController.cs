@@ -19,11 +19,13 @@ namespace AdminUser.Controllers
         public IActionResult Submit(AdminInputFormModel model)
         {
             if (ModelState.IsValid)
-            {
-                return RedirectToAction("Index", "AdminDashboard", new { firstName = model.FirstName });
-            }
+    {
+        // Handle successful form submission, e.g., save data or redirect
+        return View("~/Views/AdminViews/AdminDashboard.cshtml", model);
+    }
 
-            return View("Admin", model);
+    // Return to the sign-up form if validation fails
+    return View("Admin", model);
         }
 
         public IActionResult AdminDashboard(string firstName)
