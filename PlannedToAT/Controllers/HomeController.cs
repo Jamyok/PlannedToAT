@@ -23,22 +23,22 @@ namespace PlannedToAT.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult LogIn()
         {
-            return View();
+        return LocalRedirect("~/Identity/Account/Login");
         }
 
         // Displays the main sign-up page
         public IActionResult SignUp()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
 
         // Displays the student sign-up page
         [HttpGet]
         public IActionResult SignUpStudent()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
 
         [HttpPost]
