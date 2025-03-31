@@ -1,34 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PlannedToAT.Models.AdminModels
+namespace LoadCsv.Models
 {
-    /*public class ReportsModel
-    {
-        [Key]
-        [Column("StudentID")]
-        public int Id { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string FirstName { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string LastName { get; set; }
-
-        [MaxLength(100)]
-        public string School { get; set; }
-
-        [MaxLength(100)]
-        public string Organization { get; set; }
-
-        public int? GraduatingYear { get; set; }
-
-        public bool? HasBankAccount { get; set; }
-    }*/
-
-    
     public class ReportsModel
     {
         [Key]
@@ -92,9 +66,9 @@ namespace PlannedToAT.Models.AdminModels
         public string State { get; set; } // State from Cohorts
 
         public bool? HasBankAccount { get; set; }
-        
+
     }
-    
+
 }
 
 

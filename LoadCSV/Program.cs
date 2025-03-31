@@ -1,15 +1,19 @@
 ﻿// See https://aka.ms/new-console-template for more information
-class Program
-{
-    static void Main(string[] args)
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly CsvImportService _csvImportService;
-        public ReportsController(ApplicationDbContext context)
-        {
-            _context = context;
-            _csvImportService = new CsvImportService(_context);
-            _csvImportService.ImportCsv("wwwroot/data/Participants-All_data_fields.csv"); 
-        }
-    }
-}
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using LoadCsv;
+using LoadCsv.Services;
+
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+builder.Configuration.Sources.Clear();
+
+IHostEnvironment env = builder.Environment;
+
+builder.Configuration
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+
+var dbContext = new ImportCsvDbContext(builder.Configuration);
+var csvImportService = new CsvImportService(dbContext);
+csvImportService.ImportCsv("data/Participants-All_data_fields.csv");

@@ -18,8 +18,6 @@ namespace PlannedToAT.Models
 
         public DbSet<StudentSurveyResponseModel> StudentSurvey { get; set; }
 
-        public DbSet<ReportsModel> ReportData { get; set;} 
-
         // Constructor with DbContextOptions
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
