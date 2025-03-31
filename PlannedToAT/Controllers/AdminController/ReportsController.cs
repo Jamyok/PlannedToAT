@@ -11,14 +11,14 @@ namespace PlannedToAT.Controllers.AdminController
         //figure out the admindbcontext change
         //add the csvimport
         private readonly ApplicationDbContext _context;
-        private readonly CsvImportService _csvImportService;
+        /*private readonly CsvImportService _csvImportService;
 
         public ReportsController(ApplicationDbContext context)
         {
             _context = context;
             _csvImportService = new CsvImportService(_context);
-            _csvImportService.ImportCsv("wwwroot/data/Participants-All_data_fields.csv"); // One-time CSV import instead of manual addon
-        }
+            _csvImportService.ImportCsv("wwwroot/data/Participants-All_data_fields.csv"); 
+        }*/
 
         
 
