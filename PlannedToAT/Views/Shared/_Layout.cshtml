@@ -20,6 +20,11 @@
     (ViewContext.RouteData.Values.ContainsKey("action") && 
      ViewContext.RouteData.Values["action"]?.ToString() == "AdminDashboard")
         ))
+
+    @if (User.IsInRole("Admin"))
+    {
+        <li><a asp-controller="Admin" asp-action="Dashboard">Admin Panel</a></li>
+    }    
     {
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">

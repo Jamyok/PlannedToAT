@@ -114,3 +114,32 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+
+//create first admin user
+public static class RoleInitializer
+{
+    public static async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        // Ensure Admin Role Exists
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        // Ensure an Admin User Exists
+        string adminEmail = "admin@example.com";
+        string adminPassword = "Admin@123"; 
+
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser == null)
+        {
+            adminUser = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(adminUser, adminPassword);
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
