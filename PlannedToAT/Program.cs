@@ -1,14 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
+using PlannedToAT.Services;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// db builder for MySQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// PostgreSQL connection string
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString,
-        new MySqlServerVersion(new Version(8, 0, 32))));
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+        npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null) // 🔹 Optional: retry logic
+    ));
+
+builder.Services.AddScoped<CsvImportService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

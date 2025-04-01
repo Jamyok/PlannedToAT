@@ -71,26 +71,17 @@ namespace PlannedToAT.Controllers
                 return BadRequest("No responses provided.");
             }
 
-            // Ensure user is authenticated before saving the survey
-            if (!User.Identity.IsAuthenticated)
+            if (string.IsNullOrEmpty(response.StudentEmail) || string.IsNullOrEmpty(response.StudentName))
             {
-                return RedirectToAction("SurveySuccess", "StudentSurvey");
-            }
-
-            // Retrieve student email
-            string studentEmail = User.Identity.Name;
-
-            // If still null, return an error
-            if (string.IsNullOrEmpty(studentEmail))
-            {
-                return BadRequest("Unable to retrieve student email. Please log in.");
+                return BadRequest("Name and Email are required.");
             }
 
             foreach (var entry in response.Responses)
             {
                 var surveyResponse = new StudentSurveyResponseModel
                 {
-                    StudentEmail = studentEmail,
+                    StudentName = response.StudentName,
+                    StudentEmail = response.StudentEmail,
                     Question = entry.Key,
                     Response = entry.Value
                 };
@@ -98,10 +89,11 @@ namespace PlannedToAT.Controllers
                 dbContext.StudentSurvey.Add(surveyResponse);
             }
 
-            dbContext.SaveChanges(); // Persist all responses
+            dbContext.SaveChanges();
 
             return RedirectToAction("SurveySuccess");
         }
+
 
         // Success page after submission
         public IActionResult SurveySuccess()

@@ -30,6 +30,16 @@
             "database": "mysql",
             "username": "root",
             "password": "Moses.123"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Admin",
+            "database": "plannedtoat",
+            "username": "postgres",
+            "password": "abc123"
         }
     ]
 }
