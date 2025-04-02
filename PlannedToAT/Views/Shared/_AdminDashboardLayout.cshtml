@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Student Dashboard</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@ViewData["Title"] - Admin Dashboard</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<style>
         .navbar-nav .nav-item {
-            padding-right: 20px;  /* Adds padding between nav items */
+            padding-right: 20px;
         }
-
         .navbar-nav .nav-item:first-child {
-            padding-left: 20px;  /* Adds padding to the first item (Student Dashboard) */
+            padding-left: 20px;
         }
-
         .navbar-nav .nav-item:last-child {
-            padding-right: 0;  /* Removes extra padding from the last item */
+            padding-right: 0;  
         }
-    </style>
+</style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Student Dashboard</a>
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
             <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">  <!-- me-auto pushes the rest of the nav items to the left -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("StudentDashboard", "Student")">Home</a>
+                        <a class="nav-link" href="@Url.Action("Index", "Admin")">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "StudentSurvey")">Student Survey</a>
+                        <a class="nav-link" href="@Url.Action("Users", "Admin")">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Profile", "Home")">Profile</a>
+                        <a class="nav-link" href="@Url.Action("Reports", "Admin")">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("SurveyForm", "Admin")">Survey Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Profile", "Admin")">Profile</a>
                     </li>
                 </ul>
-                
-                <!-- Right-aligned logout button -->
                 <form asp-controller="Home" asp-action="Logout" method="post" class="d-flex">
                     <button type="submit" class="btn btn-outline-secondary">Logout</button>
                 </form>
             </div>
         </nav>
     </header>
-
     <main role="main" class="container">
-        @RenderBody()  <!-- This is where the content of the individual views will be rendered -->
+        @RenderBody()
     </main>
-
     <footer class="footer mt-4 py-3 bg-light">
         <div class="container">
             &copy; 2024 - PlannedToAT
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
