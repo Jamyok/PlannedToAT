@@ -4,7 +4,6 @@ using PlannedToAT.Models;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authorization;
-using PlannedToAT.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 
@@ -21,9 +20,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 // Add Identity services
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options => {
+    options.SignIn.RequireConfirmedAccount = true;
+    options.User.RequireUniqueEmail = true;
+    })
+
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI();
+
 
 
 builder.Services.AddControllersWithViews()
@@ -62,6 +67,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 var app = builder.Build();
+    app.MapIdentityApi<ApplicationUser>();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -79,7 +86,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapRazorPages();
+//app.MapRazorPages();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -111,6 +118,13 @@ app.MapControllerRoute(
      defaults: new { controller = "StudentInput" })
     .RequireAuthorization(new AuthorizeAttribute { Roles = "StudentUser" });//require Student
 
+// Call the SeedData method to ensure roles and admin user are created
+
+
+using (var scope = app.Services.CreateScope())
+    {
+       await RoleInitializer.SeedRolesAndAdminAsync(scope.ServiceProvider); // your usual code
+    }
 
 
 app.Run();
@@ -121,6 +135,7 @@ public static class RoleInitializer
 {
     public static async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
     {
+        Console.WriteLine("Seeding roles and admin user...");
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
