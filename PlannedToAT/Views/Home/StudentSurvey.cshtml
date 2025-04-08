@@ -1,0 +1,50 @@
+@model PlannedToAT.Models.SurveyManagementModel
+@{
+    ViewData["Title"] = "Student Survey";
+}
+
+<div class="container mt-5">
+    <div class="card bg-light shadow-lg p-4 border-primary">
+        <h2 class="text-center text-primary">@Model.SurveyTitle</h2>
+        
+        <form method="post">
+            @foreach (var question in Model.Questions)
+            {
+                <div class="mb-3">
+                    <label class="form-label">@question.Text</label>
+
+                    @if (question.Type == "Textarea")
+                    {
+                        <textarea class="form-control" rows="4" placeholder="Your answer..."></textarea>
+                    }
+                    else if (question.Type == "Radio")
+                    {
+                        var options = question.Options.Split(',');
+                        foreach (var option in options)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="@question.Text" value="@option" />
+                                <label class="form-check-label">@option</label>
+                            </div>
+                        }
+                    }
+                    else if (question.Type == "Checkbox")
+                    {
+                        var options = question.Options.Split(',');
+                        foreach (var option in options)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="@question.Text" value="@option" />
+                                <label class="form-check-label">@option</label>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-primary">Submit Survey</button>
+            </div>
+        </form>
+    </div>
+</div>

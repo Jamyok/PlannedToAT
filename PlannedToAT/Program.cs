@@ -1,20 +1,19 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.Cookies;
-
-
+using PlannedToAT.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// db builder for MySQL
+// db builder for MySQL with error resiliency
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString,
-        new MySqlServerVersion(new Version(8, 0, 32))));
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+        npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null) // Add retry logic
+    ));
+
+builder.Services.AddScoped<CsvImportService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -125,7 +124,6 @@ using (var scope = app.Services.CreateScope())
     {
        await RoleInitializer.SeedRolesAndAdminAsync(scope.ServiceProvider); // your usual code
     }
-
 
 app.Run();
 

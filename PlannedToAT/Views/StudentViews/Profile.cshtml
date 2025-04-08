@@ -1,4 +1,60 @@
 @model PlannedToAT.Models.StudentModels.SignUpStudent
 
-<h2>Welcome to the Profile</h2>
-<p>This is your Student Profile where you can edit the information in your profile</p>
+@{
+    Layout = "_StudentDashboardLayout";
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+    <form asp-controller="Home" asp-action="UpdateProfile" method="post">
+        <div class="form-group">
+            <label for="StudentName">Student Name</label>
+            <input type="text" class="form-control" id="StudentName" name="StudentName" value="@Model.StudentName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="EmailAddress">Email Address</label>
+            <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" value="@Model.EmailAddress" required>
+        </div>
+
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number</label>
+            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Institution">Institution</label>
+            <input type="text" class="form-control" id="Institution" name="Institution" value="@Model.Institution" required>
+        </div>
+
+        <div class="form-group">
+            <label for="SubgroupOrTeam">Subgroup or Team</label>
+            <input type="text" class="form-control" id="SubgroupOrTeam" name="SubgroupOrTeam" value="@Model.SubgroupOrTeam">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <hr>
+
+    <h2>Change Password</h2>
+    <form asp-controller="Home" asp-action="ChangePassword" method="post">
+        <div class="form-group">
+            <label for="CurrentPassword">Current Password</label>
+            <input type="password" class="form-control" id="CurrentPassword" name="CurrentPassword" required>
+        </div>
+
+        <div class="form-group">
+            <label for="NewPassword">New Password</label>
+            <input type="password" class="form-control" id="NewPassword" name="NewPassword" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ConfirmPassword">Confirm New Password</label>
+            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
+        </div>
+
+        <button type="submit" class="btn btn-danger">Change Password</button>
+    </form>
+</div>

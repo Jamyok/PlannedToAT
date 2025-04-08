@@ -2,51 +2,114 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PlannedToAT.Controllers
 {
     [Authorize(Roles = "StudentUser")]
     public class StudentSurveyController : Controller
     {
-        [HttpGet]
-        public IActionResult StudentSurvey()
+        private readonly ApplicationDbContext dbContext;
+
+        public StudentSurveyController(ApplicationDbContext dbContext)
         {
-            return View(new StudentSurveyModel());
+            this.dbContext = dbContext;
         }
+
+        private static SurveyManagementModel _currentSurvey = new SurveyManagementModel
+        {
+            SurveyTitle = "Student Feedback Survey",
+            Questions = new List<SurveyQuestion>
+            {
+                new SurveyQuestion { Text = "How would you rate the program?", Type = "Radio", Options = "Excellent,Good,Neutral,Poor" },
+                new SurveyQuestion { Text = "What did you find most valuable?", Type = "Textarea" },
+                new SurveyQuestion { Text = "Would you recommend this program?", Type = "Radio", Options = "Yes,No" }
+            }
+        };
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SubmitSurvey(StudentSurveyModel model, List<string>? SelectedTopics)
+        public IActionResult UpdateSurvey(SurveyManagementModel model)
         {
-            if (ModelState.IsValid)
+            if (model == null)
             {
-                // Ensure SelectedTopics is not null before filtering
-                if (SelectedTopics != null && model.UsefulTopics != null)
-                {
-                    model.UsefulTopics = model.UsefulTopics
-                        .Where(t => SelectedTopics.Contains(t.Value))
-                        .ToList();
-                }
-
-                // Simulating data persistence using TempData (replace with database logic)
-                TempData["SurveyData"] = Newtonsoft.Json.JsonConvert.SerializeObject(model);
-
-                return RedirectToAction("SurveySuccess");
+                return NotFound("Survey data not provided.");
             }
 
-            return View("StudentSurvey", model);
+            foreach (var question in model.Questions)
+            {
+                if (string.IsNullOrWhiteSpace(question.Options) && (question.Type == "Text" || question.Type == "Textarea"))
+                {
+                    question.Options = ""; // Ensure it's not null to prevent MySQL errors
+                }
+            }
+
+            // Update the static survey model
+            _currentSurvey = model;
+
+            dbContext.Surveys.Add(model);
+            dbContext.SaveChanges();
+
+            return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
         }
 
-        public IActionResult SurveySuccess()
+        public IActionResult Index()
         {
-            if (TempData["SurveyData"] is string surveyJson)
+            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+        }
+
+        // Display the updated student survey
+        public IActionResult ViewUpdatedSurvey()
+        {
+            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+        }
+
+        // Handle student survey submissions
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitSurvey(StudentSurveyAnswers response)
+
+        {
+            if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
-                var model = Newtonsoft.Json.JsonConvert.DeserializeObject<StudentSurveyModel>(surveyJson);
-                return View(model);
+                return BadRequest("No responses provided.");
             }
 
-            return View();
+            // Ensure user is authenticated before saving the survey
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("SurveySuccess", "StudentSurvey");
+            }
+
+            // Retrieve student email
+            string studentEmail = User.Identity.Name;
+
+            // If still null, return an error
+            if (string.IsNullOrEmpty(studentEmail))
+            {
+                return BadRequest("Unable to retrieve student email. Please log in.");
+            }
+
+            foreach (var entry in response.Responses)
+            {
+                var surveyResponse = new StudentSurveyResponseModel
+                {
+                    StudentEmail = studentEmail,
+                    Question = entry.Key,
+                    Response = entry.Value
+                };
+
+                dbContext.StudentSurvey.Add(surveyResponse);
+            }
+
+            dbContext.SaveChanges(); // Persist all responses
+
+            return RedirectToAction("SurveySuccess");
+        }
+
+        // Success page after submission
+        public IActionResult SurveySuccess()
+        {
+            return View("~/Views/StudentSurvey/SurveySuccess.cshtml");
         }
     }
 }
