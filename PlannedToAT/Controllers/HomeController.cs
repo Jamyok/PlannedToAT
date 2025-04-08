@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using PlannedToAT.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using PlannedToAT.Models;
 using PlannedToAT.Models.StudentModels;
 using PlannedToAT.Models.AdminModels;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +26,9 @@ namespace PlannedToAT.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult LogIn()
         {
-            return View();
+        return LocalRedirect("~/Identity/Account/Login");
         }
         
         public IActionResult Profile()
@@ -81,63 +82,69 @@ namespace PlannedToAT.Controllers
         // Displays the main sign-up page
         public IActionResult SignUp()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
 
         // Displays the student sign-up page
+        [HttpGet]
         public IActionResult SignUpStudent()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
-        public IActionResult StudentDashboard(string studentName, DateTime dob, string race, string phone, string email, string institution, string subgroup)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitStudentForm(SignUpStudent studentData)
         {
-            var model = new SignUpStudent
+            if (ModelState.IsValid)
             {
-                StudentName = studentName,
-                DateOfBirth = dob,
-                RaceEthnicity = race,
-                PhoneNumber = phone,
-                EmailAddress = email,
-                Institution = institution,
-                SubgroupOrTeam = subgroup
-            };
-
-            return View(model);
+                TempData["StudentData"] = JsonConvert.SerializeObject(studentData);
+                return RedirectToAction("StudentDashboard");
+            }
+            return View("SignUpStudent", studentData);
         }
 
+        public IActionResult StudentDashboard()
+        {
+            if (TempData["StudentData"] is string studentJson)
+            {
+                var model = JsonConvert.DeserializeObject<SignUpStudent>(studentJson);
+                return View(model);
+            }
+            return RedirectToAction("SignUpStudent");
+        }
+
+        [HttpGet]
         public IActionResult SignUpAdmin()
         {
             return View("~/Views/AdminViews/AdminSignUp.cshtml");
         }
 
-
-        // Handles admin form submission
         [HttpPost]
-        public IActionResult SignUpAdmin(AdminInputFormModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitAdminForm(AdminInputFormModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("AdminDashboard", new { firstName = model.FirstName });
+                TempData["AdminFirstName"] = model.FirstName;
+                return RedirectToAction("AdminDashboard");
             }
-
-            return View(model);
+            return View("SignUpAdmin", model);
         }
 
-        // Displays admin dashboard
-        public IActionResult AdminDashboard(string firstName)
+        public IActionResult AdminDashboard()
         {
             var model = new AdminInputFormModel
             {
-                FirstName = firstName
+                FirstName = TempData["AdminFirstName"] as string
             };
-
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -156,6 +163,5 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
-
     }
 }

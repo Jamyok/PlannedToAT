@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
+    [Authorize(Roles = "StudentUser")]
     public class StudentSurveyController : Controller
     {
         private readonly ApplicationDbContext dbContext;
@@ -65,6 +67,7 @@ namespace PlannedToAT.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SubmitSurvey(StudentSurveyAnswers response)
+
         {
             if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
