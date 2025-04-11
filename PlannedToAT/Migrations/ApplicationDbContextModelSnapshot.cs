@@ -209,14 +209,16 @@ namespace PlannedToAT.Migrations
 
                     b.Property<string>("Accounts")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<decimal?>("CheckingBalanceStart")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("CheckingStart")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("CheckingStartImage")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("Cohorts")
                         .IsRequired()
@@ -235,13 +237,13 @@ namespace PlannedToAT.Migrations
 
                     b.Property<string>("ExitTickets")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("FamilyFriends")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -259,8 +261,10 @@ namespace PlannedToAT.Migrations
                     b.Property<decimal?>("InvestingBalanceStart")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("InvestingStart")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("InvestingStartImage")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -269,31 +273,35 @@ namespace PlannedToAT.Migrations
 
                     b.Property<string>("NeedsWants")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("PhotoPermission")
-                        .HasColumnType("boolean");
+                    b.Property<string>("PhotoPermission")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("SMARTGoal")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("SavingGoal")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<decimal?>("SavingsBalanceStart")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("SavingsStart")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("SavingsStartImage")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("Session2Signup")
                         .HasColumnType("timestamp with time zone");
@@ -303,12 +311,12 @@ namespace PlannedToAT.Migrations
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("ParticipantID");
 
-                    b.ToTable("ReportData");
+                    b.ToTable("CsvImportData");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.ApplicationUser", b =>

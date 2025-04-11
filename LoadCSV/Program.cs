@@ -17,3 +17,4 @@ builder.Configuration
 var dbContext = new ImportCsvDbContext(builder.Configuration);
 var csvImportService = new CsvImportService(dbContext);
 csvImportService.ImportCsv("data/Participants-All_data_fields.csv");
+Console.WriteLine("CSV Import complete.");

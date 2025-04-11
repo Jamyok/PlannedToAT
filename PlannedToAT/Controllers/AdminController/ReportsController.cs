@@ -1,26 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using PlannedToAT.Models.AdminModels;
-using PlannedToAT.Services;
+
+
 
 namespace PlannedToAT.Controllers.AdminController
 {
-    public class ReportsController : Controller
+    public class ReportsController(ApplicationDbContext dbContext) : Controller
     {
 
-        //figure out the admindbcontext change
-        //add the csvimport
-        private readonly ApplicationDbContext _context;
-        /*private readonly CsvImportService _csvImportService;
-
-        public ReportsController(ApplicationDbContext context)
-        {
-            _context = context;
-            _csvImportService = new CsvImportService(_context);
-            _csvImportService.ImportCsv("wwwroot/data/Participants-All_data_fields.csv"); 
-        }*/
-
-        
 
         [HttpGet]
         public IActionResult Reports()
@@ -44,20 +32,20 @@ namespace PlannedToAT.Controllers.AdminController
             switch (reportSelection)
             {
                 case "TotalStudents":
-                    var totalStudentsCount = _context.ReportData.Count();
+                    var totalStudentsCount = dbContext.CsvImportData.Count();
                     ViewData["ReportTitle"] = "Total Number of Students";
                     ViewData["ReportData"] = totalStudentsCount.ToString();
                     return View("~/Views/AdminViews/Reports.cshtml");
 
                 case "StudentsWithBankAccounts":
-                    reportData = _context.ReportData
+                    reportData = dbContext.CsvImportData
                         .Where(student => student.HasBankAccount == true)
                         .ToList();
                     ViewData["ReportTitle"] = "Students with Bank Accounts";
                     break;
 
                 case "StudentDetails":
-                    reportData = _context.ReportData.ToList();
+                    reportData = dbContext.CsvImportData.ToList();
                     ViewData["ReportTitle"] = "All Student Details";
                     break;
 

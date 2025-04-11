@@ -5,6 +5,7 @@ using PlannedToAT.Models.AdminModels;
 using PlannedToAT.Models.StudentModels;
 using StudentManagementApp.Models;
 
+
 namespace PlannedToAT.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -17,6 +18,9 @@ namespace PlannedToAT.Models
         public DbSet<AdminInputFormModel> AdminSignUp { get; set; }
 
         public DbSet<StudentSurveyResponseModel> StudentSurvey { get; set; }
+
+        public DbSet<ReportsModel> CsvImportData { get; set;}
+
 
         // Constructor with DbContextOptions
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

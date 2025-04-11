@@ -20,11 +20,14 @@ namespace LoadCsv.Services
         public void ImportCsv(string filePath)
         {
             if (!File.Exists(filePath))
-            {
                 throw new FileNotFoundException("CSV not found.", filePath);
-            }
 
-            var students = new List<ReportsModel>();
+            var students = new List<ImportDataModel>();
+            var dateFormats = new[] {
+                "MM/dd/yyyy", "M/d/yyyy",
+                "MM/dd/yyyy h:mmtt", "M/d/yyyy h:mmtt",
+                "MM/dd/yyyy hh:mm tt", "M/d/yyyy hh:mm tt"
+            };
 
             using (var reader = new StreamReader(filePath))
             {
@@ -34,62 +37,36 @@ namespace LoadCsv.Services
                 {
                     var row = reader.ReadLine()?.Split(',');
 
-                    if (row == null || row.Length != headers.Length) continue;
+                    if (row == null || row.Length < 25) continue;
 
-                    // Read all values as strings first to handle nulls
-                    string participantId = row[0];
-                    string fullName = row[1];
-                    string created = row[2];
-                    string firstName = row[3];
-                    string lastName = row[4];
-                    string email = row[5];
-                    string phoneNumber = row[6];
-                    string dob = row[7];
-                    string cohorts = row[8];
-                    string photoPermission = row[9];
-                    string accounts = row[10];
-                    string checkingStart = row[11];
-                    string savingsStart = row[12];
-                    string investingStart = row[13];
-                    string exitTickets = row[14];
-                    string needsWants = row[15];
-                    string smartGoal = row[16];
-                    string familyFriends = row[17];
-                    string savingGoal = row[18];
-                    string session2Signup = row[19];
-                    string session3Signup = row[20];
-                    string checkingBalanceStart = row[21];
-                    string savingsBalanceStart = row[22];
-                    string investingBalanceStart = row[23];
-                    string state = row[24];
-
-                    var student = new ReportsModel
+                    var student = new ImportDataModel
                     {
-                        ParticipantID = int.TryParse(participantId, out int id) ? id : 0,
-                        FullName = fullName,
-                        Created = DateTime.TryParseExact(created, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime createdDate) ? createdDate : (DateTime?)null,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        Email = email,
-                        PhoneNumber = phoneNumber,
-                        DOB = DateTime.TryParseExact(dob, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dobDate) ? dobDate : (DateTime?)null,
-                        Cohorts = cohorts,
-                        PhotoPermission = !string.IsNullOrEmpty(photoPermission), // If string exists, it's true
-                        Accounts = accounts,
-                        CheckingStart = DateTime.TryParseExact(checkingStart, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime checkingDate) ? checkingDate : (DateTime?)null,
-                        SavingsStart = DateTime.TryParseExact(savingsStart, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime savingsDate) ? savingsDate : (DateTime?)null,
-                        InvestingStart = DateTime.TryParseExact(investingStart, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime investingDate) ? investingDate : (DateTime?)null,
-                        ExitTickets = exitTickets,
-                        NeedsWants = needsWants,
-                        SMARTGoal = smartGoal,
-                        FamilyFriends = familyFriends,
-                        SavingGoal = savingGoal,
-                        Session2Signup = DateTime.TryParseExact(session2Signup, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime session2Date) ? session2Date : (DateTime?)null,
-                        Session3Signup = DateTime.TryParseExact(session3Signup, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime session3Date) ? session3Date : (DateTime?)null,
-                        CheckingBalanceStart = decimal.TryParse(checkingBalanceStart, out decimal checkingBal) ? checkingBal : (decimal?)null,
-                        SavingsBalanceStart = decimal.TryParse(savingsBalanceStart, out decimal savingsBal) ? savingsBal : (decimal?)null,
-                        InvestingBalanceStart = decimal.TryParse(investingBalanceStart, out decimal investingBal) ? investingBal : (decimal?)null,
-                        State = state
+                        ParticipantID = int.TryParse(CleanValue(row[0]), out int id) ? id : 0,
+                        FullName = CleanValue(row[1]),
+                        Created = TryParseDate(CleanValue(row[2]), dateFormats),
+                        FirstName = CleanValue(row[3]),
+                        LastName = CleanValue(row[4]),
+                        Email = CleanValue(row[5]),
+                        PhoneNumber = CleanValue(row[6]),
+                        DOB = TryParseDate(CleanValue(row[7]), dateFormats),
+                        Cohorts = CleanValue(row[8], "Unknown"),
+                        PhotoPermission = CleanValue(row[9]),
+                        Accounts = CleanValue(row[10]),
+                        CheckingStartImage = CleanValue(row[11]),
+                        SavingsStartImage = CleanValue(row[12]),
+                        InvestingStartImage = CleanValue(row[13]),
+                        ExitTickets = CleanValue(row[14], "N/A"),
+                        NeedsWants = CleanValue(row[15]),
+                        SMARTGoal = CleanValue(row[16]),
+                        FamilyFriends = CleanValue(row[17], "N/A"),
+                        SavingGoal = CleanValue(row[18]),
+                        Session2Signup = TryParseDate(CleanValue(row[19]), dateFormats),
+                        Session3Signup = TryParseDate(CleanValue(row[20]), dateFormats),
+                        CheckingBalanceStart = TryParseDecimal(CleanValue(row[21])),
+                        SavingsBalanceStart = TryParseDecimal(CleanValue(row[22])),
+                        InvestingBalanceStart = TryParseDecimal(CleanValue(row[23])),
+                        State = CleanValue(row[24], "Unknown"),
+                        HasBankAccount = !string.IsNullOrWhiteSpace(CleanValue(row[10]))
                     };
 
                     students.Add(student);
@@ -98,6 +75,27 @@ namespace LoadCsv.Services
 
             _context.CsvImportData.AddRange(students);
             _context.SaveChanges();
+        }
+
+        private static string CleanValue(string? input, string fallback = "N/A") =>
+            string.IsNullOrWhiteSpace(input) ? fallback : input.Trim();
+
+        private static DateTime? TryParseDate(string input, string[] formats)
+        {
+            if (DateTime.TryParseExact(input, formats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime date))
+            {
+                return DateTime.SpecifyKind(date, DateTimeKind.Utc);
+            }
+            return null;
+        }
+
+        private static decimal? TryParseDecimal(string input)
+        {
+            if (decimal.TryParse(input?.Replace("$", "").Trim(), out decimal result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

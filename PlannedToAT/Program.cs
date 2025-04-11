@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
-using PlannedToAT.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +11,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null) // Add retry logic
     ));
 
-builder.Services.AddScoped<CsvImportService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

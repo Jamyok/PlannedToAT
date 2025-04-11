@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoadCsv.Models
 {
-    public class ReportsModel
+    public class ImportDataModel
     {
         [Key]
         public int ParticipantID { get; set; }
@@ -12,7 +11,7 @@ namespace LoadCsv.Models
         [MaxLength(100)]
         public string FullName { get; set; }
 
-        public DateTime? Created { get; set; }  // Date student was created
+        public DateTime? Created { get; set; }
 
         [MaxLength(50)]
         public string FirstName { get; set; }
@@ -26,76 +25,54 @@ namespace LoadCsv.Models
         [Phone]
         public string PhoneNumber { get; set; }
 
-        public DateTime? DOB { get; set; } // Date of birth
+        public DateTime? DOB { get; set; }
 
         [MaxLength(100)]
-        public string Cohorts { get; set; } // Link to Cohorts (kept as string for now)
+        public string Cohorts { get; set; }
 
-        public bool PhotoPermission { get; set; } // Convert link to true/false
+        [MaxLength(1000)]
+        public string PhotoPermission { get; set; }
 
-        [MaxLength(100)]
-        public string Accounts { get; set; } // Savings,checking,etc
+        [MaxLength(1000)]
+        public string Accounts { get; set; }
 
-        public DateTime? CheckingStart { get; set; }
-        public DateTime? SavingsStart { get; set; }
-        public DateTime? InvestingStart { get; set; }
+        [MaxLength(1000)]
+        public string CheckingStartImage { get; set; }
 
-        [MaxLength(100)]
-        public string ExitTickets { get; set; } // Link to exit tickets
+        [MaxLength(1000)]
+        public string SavingsStartImage { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(1000)]
+        public string InvestingStartImage { get; set; }
+
+        [MaxLength(1000)]
+        public string ExitTickets { get; set; }
+
+        [MaxLength(500)]
         public string NeedsWants { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(500)]
         public string SMARTGoal { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(1000)]
         public string FamilyFriends { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(500)]
         public string SavingGoal { get; set; }
 
         public DateTime? Session2Signup { get; set; }
+
         public DateTime? Session3Signup { get; set; }
 
         public decimal? CheckingBalanceStart { get; set; }
+
         public decimal? SavingsBalanceStart { get; set; }
+
         public decimal? InvestingBalanceStart { get; set; }
 
-        [MaxLength(50)]
-        public string State { get; set; } // State from Cohorts
+        [MaxLength(100)]
+        public string State { get; set; }
 
         public bool? HasBankAccount { get; set; }
-
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
