@@ -4,6 +4,7 @@ using PlannedToAT.Data;
 using PlannedToAT.Models.AdminModels;
 using PlannedToAT.Models.StudentModels;
 using StudentManagementApp.Models;
+using LoadCsv.Models;
 
 namespace PlannedToAT.Models
 {
@@ -17,6 +18,8 @@ namespace PlannedToAT.Models
         public DbSet<AdminInputFormModel> AdminSignUp { get; set; }
 
         public DbSet<StudentSurveyResponseModel> StudentSurvey { get; set; }
+
+        public DbSet<ReportsModel> ReportData { get; set; }
 
         // Constructor with DbContextOptions
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
