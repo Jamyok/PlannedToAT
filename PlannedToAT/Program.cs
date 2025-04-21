@@ -27,6 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders() // ✅ Adds email/phone/2FA token providers
 .AddDefaultUI();
 
 builder.Services.AddControllersWithViews()
