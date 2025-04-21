@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
 using PlannedToAT.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,17 +40,6 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
     });
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>(); 
-});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -57,7 +49,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/Identity/Account/Login";
     // ReturnUrlParameter requires 
-    //using Microsoft.AspNetCore.Authentication.Cookies;
     options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
     options.SlidingExpiration = true;
 });
@@ -86,16 +77,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 //app.MapRazorPages();
-
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    c.RoutePrefix = "swagger";
-});
-
-
-
 
 // Default route for the application
 app.MapControllerRoute(
