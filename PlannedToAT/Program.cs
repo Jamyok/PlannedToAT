@@ -5,7 +5,6 @@ using PlannedToAT.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // db builder for MySQL with error resiliency
@@ -22,16 +21,13 @@ builder.Services.AddScoped<CsvImportService>();
 builder.Services.AddControllersWithViews();
 
 // Add Identity services
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options => {
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
     options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
-    })
-
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultUI();
-
-
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultUI();
 
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
@@ -40,7 +36,6 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
     });
 
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
@@ -48,17 +43,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/Identity/Account/Login";
-    // ReturnUrlParameter requires 
     options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
     options.SlidingExpiration = true;
 });
 
-
-
-
 var app = builder.Build();
-    app.MapIdentityApi<ApplicationUser>();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -76,7 +65,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-//app.MapRazorPages();
+app.MapRazorPages(); // ✅ Enables Razor Pages, including Identity UI
 
 // Default route for the application
 app.MapControllerRoute(
@@ -87,29 +76,26 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "admin",
     pattern: "Admin/{action=Index}/{id?}",
-     defaults: new { controller = "AdminInput" })
-    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });//require admin 
-app.MapIdentityApi<PlannedToAT.Models.AdminUser>();
+    defaults: new { controller = "AdminInput" })
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
 
 // Route specifically for Student actions
 app.MapControllerRoute(
     name: "student",
     pattern: "Student/{action=Index}/{id?}",
-     defaults: new { controller = "StudentInput" })
-    .RequireAuthorization(new AuthorizeAttribute { Roles = "StudentUser" });//require Student
+    defaults: new { controller = "StudentInput" })
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "StudentUser" });
 
 // Call the SeedData method to ensure roles and admin user are created
-
-
 using (var scope = app.Services.CreateScope())
-    {
-       await RoleInitializer.SeedRolesAndAdminAsync(scope.ServiceProvider); // your usual code
-    }
+{
+    await RoleInitializer.SeedRolesAndAdminAsync(scope.ServiceProvider);
+}
 
 app.Run();
 
 
-//create first admin user
+// Create first admin user
 public static class RoleInitializer
 {
     public static async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
