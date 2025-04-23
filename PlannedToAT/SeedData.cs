@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-using PlannedToAT.Models;
 public static class SeedData
 {
     public static async Task InitializeAsync(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<PlannedToAT.Models.AdminModels.AdminUser>>(); 
+        var userManager = serviceProvider.GetRequiredService<UserManager<PlannedToAT.Models.AdminUser>>(); 
 
         string adminRole = "Admin";
 
@@ -21,7 +20,7 @@ public static class SeedData
 
         if (existingAdmin == null)
         {
-            var adminUser = new PlannedToAT.Models.AdminModels.AdminUser()
+            var adminUser = new PlannedToAT.Models.AdminUser()
             {
                 UserName = "admin",
                 Email = adminEmail,

@@ -12,8 +12,8 @@ using PlannedToAT.Models;
 namespace PlannedToAT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250308141821_InitialCreate_Postgres")]
-    partial class InitialCreate_Postgres
+    [Migration("20250421175043_Initial_Postgres")]
+    partial class Initial_Postgres
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -456,6 +456,21 @@ namespace PlannedToAT.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProgramExperience")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Satisfaction")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("SurveyTitle")
                         .IsRequired()

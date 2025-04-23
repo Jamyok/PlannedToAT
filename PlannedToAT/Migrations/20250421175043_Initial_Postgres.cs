@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PlannedToAT.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate_Postgres : Migration
+    public partial class Initial_Postgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -170,7 +170,11 @@ namespace PlannedToAT.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SurveyTitle = table.Column<string>(type: "text", nullable: false)
+                    SurveyTitle = table.Column<string>(type: "text", nullable: false),
+                    StudentName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    ProgramExperience = table.Column<string>(type: "text", nullable: true),
+                    Satisfaction = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models;
 using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
+    [Authorize(Roles = "StudentUser")]
     public class StudentSurveyController : Controller
     {
         private readonly ApplicationDbContext dbContext;
@@ -52,7 +54,17 @@ namespace PlannedToAT.Controllers
 
         public IActionResult Index()
         {
-            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+            var studentSurvey = new StudentSurveyModel
+            {
+                StudentName = _currentSurvey.StudentName,
+                Email = _currentSurvey.Email,
+                ProgramExperience = _currentSurvey.ProgramExperience,
+                Satisfaction = _currentSurvey.Satisfaction
+                // Add others if needed
+            };
+
+            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", studentSurvey);
+
         }
 
         // Display the updated student survey
@@ -65,6 +77,7 @@ namespace PlannedToAT.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SubmitSurvey(StudentSurveyAnswers response)
+
         {
             if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
