@@ -196,7 +196,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminSignUp", (string)null);
+                    b.ToTable("AdminSignUp");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.AdminModels.ReportsModel", b =>
@@ -308,7 +308,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("ParticipantID");
 
-                    b.ToTable("ReportData", (string)null);
+                    b.ToTable("ReportData");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.ApplicationUser", b =>
@@ -418,7 +418,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SignUpStudents", (string)null);
+                    b.ToTable("SignUpStudents");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.StudentSurveyResponseModel", b =>
@@ -443,7 +443,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StudentSurvey", (string)null);
+                    b.ToTable("StudentSurvey");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.SurveyManagementModel", b =>
@@ -475,7 +475,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Surveys", (string)null);
+                    b.ToTable("Surveys");
                 });
 
             modelBuilder.Entity("PlannedToAT.Models.SurveyQuestion", b =>
@@ -505,7 +505,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasIndex("SurveyManagementModelId");
 
-                    b.ToTable("SurveyQuestion", (string)null);
+                    b.ToTable("SurveyQuestion");
                 });
 
             modelBuilder.Entity("StudentManagementApp.Models.StudentData", b =>
@@ -554,7 +554,7 @@ namespace PlannedToAT.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

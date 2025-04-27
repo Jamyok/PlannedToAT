@@ -39,7 +39,7 @@ namespace PlannedToAT.Controllers
             {
                 if (string.IsNullOrWhiteSpace(question.Options) && (question.Type == "Text" || question.Type == "Textarea"))
                 {
-                    question.Options = ""; // Ensure it's not null to prevent MySQL errors
+                    question.Options = "";
                 }
             }
 
@@ -66,38 +66,51 @@ namespace PlannedToAT.Controllers
 
         public IActionResult ViewUpdatedSurvey()
         {
-            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+            return View("~/Views/StudentSurvey/DynamicStudentSurvey.cshtml", _currentSurvey);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SubmitSurvey(StudentSurveyModel model)
+        public IActionResult SubmitSurvey(StudentSurveyAnswers response)
         {
-            if (!ModelState.IsValid)
+            if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
-                return View("~/Views/StudentSurvey/SurveySuccess.cshtml", model);
+                return BadRequest("No responses provided.");
             }
 
-            string studentEmail = model.Email;
+            string studentName = Request.Form["StudentName"];
+            string studentEmail = Request.Form["Email"];
 
-            if (string.IsNullOrEmpty(studentEmail))
+            if (string.IsNullOrWhiteSpace(studentName) || string.IsNullOrWhiteSpace(studentEmail))
             {
-                return BadRequest("Unable to retrieve student email. Please provide an email.");
+                return BadRequest("Name and Email are required.");
             }
 
-            var responses = new List<StudentSurveyResponseModel>
+            var survey = new SurveyManagementModel
             {
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Full Name", Response = model.StudentName },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Program Experience", Response = model.ProgramExperience },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Satisfaction", Response = model.Satisfaction },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Confidence Level", Response = model.ConfidenceLevel.ToString() },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Peer Interaction", Response = model.PeerInteraction },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Mentor Interaction", Response = model.MentorInteraction },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Mentorship Experience", Response = model.MentorshipExperience ?? "" },
-                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Would Recommend Program", Response = model.WouldRecommend }
+                StudentName = studentName,
+                Email = studentEmail,
+                ProgramExperience = response.Responses.ContainsKey("Program Experience") ? response.Responses["Program Experience"] : null,
+                Satisfaction = response.Responses.ContainsKey("Satisfaction") ? response.Responses["Satisfaction"] : "",
+                SurveyTitle = _currentSurvey.SurveyTitle
             };
 
-            dbContext.StudentSurvey.AddRange(responses);
+            dbContext.Surveys.Add(survey);
+            dbContext.SaveChanges();
+
+            foreach (var entry in response.Responses)
+            {
+                var surveyResponse = new StudentSurveyResponseModel
+                {
+                    StudentEmail = studentEmail,
+                    StudentName = studentName,
+                    Question = entry.Key,
+                    Response = entry.Value
+                };
+
+                dbContext.StudentSurvey.Add(surveyResponse);
+            }
+
             dbContext.SaveChanges();
 
             return RedirectToAction("SurveySuccess");
