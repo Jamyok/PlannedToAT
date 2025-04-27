@@ -63,7 +63,7 @@ namespace LoadCsv.Models
         public decimal? InvestingBalanceStart { get; set; }
 
         [MaxLength(50)]
-        public string State { get; set; } // State from Cohorts
+        public string State { get; set; }
 
         public bool? HasBankAccount { get; set; }
 

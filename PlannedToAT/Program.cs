@@ -18,12 +18,14 @@ builder.Services.AddDbContext<ImportCsvDbContext>(options =>
 
 // Register your CSV import service
 builder.Services.AddScoped<CsvImportService>();
+builder.Services.AddScoped<AdminCsvImportService>();
 
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
     });
+
 
 var app = builder.Build();
 

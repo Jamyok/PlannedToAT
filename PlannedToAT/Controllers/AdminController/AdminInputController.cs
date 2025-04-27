@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models.AdminModels;
 using PlannedToAT.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AdminUser.Controllers
 {
@@ -57,8 +59,10 @@ namespace AdminUser.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            return RedirectToAction("Index", "Home");
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home"); // Redirects to landing page
         }
+
 
         // ================================
         // 🛠 Survey Management Logic
