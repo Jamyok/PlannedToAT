@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
-    [Authorize(Roles = "StudentUser")]
+    [Authorize(Roles = "StudentUser,Admin")]
     public class StudentSurveyController : Controller
     {
         private readonly ApplicationDbContext dbContext;

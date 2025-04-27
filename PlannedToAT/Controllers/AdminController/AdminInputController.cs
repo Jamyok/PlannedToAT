@@ -106,7 +106,7 @@ namespace AdminUser.Controllers
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,StudentUser")]
     public class AdminDashboardController : Controller
     {
         public IActionResult Index(string firstName)
