@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PlannedToAT.Controllers
 {
-    //[Authorize(Roles = "StudentUser")]
+    [Authorize(Roles = "StudentUser,Admin")]
     public class StudentSurveyController : Controller
     {
         private readonly ApplicationDbContext dbContext;
@@ -43,7 +43,6 @@ namespace PlannedToAT.Controllers
                 }
             }
 
-            // Update the static survey model
             _currentSurvey = model;
 
             dbContext.Surveys.Add(model);
@@ -60,63 +59,50 @@ namespace PlannedToAT.Controllers
                 Email = _currentSurvey.Email,
                 ProgramExperience = _currentSurvey.ProgramExperience,
                 Satisfaction = _currentSurvey.Satisfaction
-                // Add others if needed
             };
 
             return View("~/Views/StudentSurvey/StudentSurvey.cshtml", studentSurvey);
-
         }
 
-        // Display the updated student survey
         public IActionResult ViewUpdatedSurvey()
         {
             return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
         }
 
-        // Handle student survey submissions
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SubmitSurvey(StudentSurveyAnswers response)
-
+        public IActionResult SubmitSurvey(StudentSurveyModel model)
         {
-            if (response == null || response.Responses == null || response.Responses.Count == 0)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("No responses provided.");
+                return View("~/Views/StudentSurvey/SurveySuccess.cshtml", model);
             }
 
-            // Ensure user is authenticated before saving the survey
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("SurveySuccess", "StudentSurvey");
-            }
+            string studentEmail = model.Email;
 
-            // Retrieve student email
-            string studentEmail = User.Identity.Name;
-
-            // If still null, return an error
             if (string.IsNullOrEmpty(studentEmail))
             {
-                return BadRequest("Unable to retrieve student email. Please log in.");
+                return BadRequest("Unable to retrieve student email. Please provide an email.");
             }
 
-            foreach (var entry in response.Responses)
+            var responses = new List<StudentSurveyResponseModel>
             {
-                var surveyResponse = new StudentSurveyResponseModel
-                {
-                    StudentEmail = studentEmail,
-                    Question = entry.Key,
-                    Response = entry.Value
-                };
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Full Name", Response = model.StudentName },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Program Experience", Response = model.ProgramExperience },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Satisfaction", Response = model.Satisfaction },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Confidence Level", Response = model.ConfidenceLevel.ToString() },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Peer Interaction", Response = model.PeerInteraction },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Mentor Interaction", Response = model.MentorInteraction },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Mentorship Experience", Response = model.MentorshipExperience ?? "" },
+                new StudentSurveyResponseModel { StudentEmail = studentEmail, Question = "Would Recommend Program", Response = model.WouldRecommend }
+            };
 
-                dbContext.StudentSurvey.Add(surveyResponse);
-            }
-
-            dbContext.SaveChanges(); // Persist all responses
+            dbContext.StudentSurvey.AddRange(responses);
+            dbContext.SaveChanges();
 
             return RedirectToAction("SurveySuccess");
         }
 
-        // Success page after submission
         public IActionResult SurveySuccess()
         {
             return View("~/Views/StudentSurvey/SurveySuccess.cshtml");
