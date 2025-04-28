@@ -51,16 +51,29 @@
         .content {
             padding: 20px;
         }
-        h2 {
-            color: #2d3e50;
+
+        .chart-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
+
         .chart-container {
-            margin-bottom: 50px;
+            flex: 1 1 22%;
+            min-width: 250px;
+            max-width: 300px;
+            height: 300px;
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+
+        h2 {
+            color: #2d3e50;
+        }
+
         .tab-buttons {
             display: flex;
             gap: 10px;
@@ -91,7 +104,6 @@
         <div class="nav-right">
             <a href="/Home/AdminDashboard?firstName=@Model.FirstName">Dashboard</a>
             <a href="/Reports/Reports">Reports</a>
-            <a href="/Admin/Users">Users</a>
             <a href="/Admin/SurveyForm">Survey Form</a>
             <a href="/Admin/Settings">Settings</a>
             <form id="logoutForm" asp-controller="AdminInput" asp-action="Logout" method="post">
@@ -102,12 +114,13 @@
 
     <div class="content">
         <h2>Welcome, @ViewData["FirstName"]</h2>
-        <div id="overview" class="tab-section active">
+        <div class="chart-grid">
             <div class="chart-container" id="usersByState"></div>
             <div class="chart-container" id="signupsByMonth"></div>
             <div class="chart-container" id="formStatus"></div>
             <div class="chart-container" id="sessionSignups"></div>
         </div>
+
     </div>
     <script>
         function confirmLogout() {

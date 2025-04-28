@@ -49,7 +49,7 @@ namespace PlannedToAT.Controllers
 
             return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
         }
-
+        [HttpGet("/StudentSurvey")]
         public IActionResult Index()
         {
             return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);

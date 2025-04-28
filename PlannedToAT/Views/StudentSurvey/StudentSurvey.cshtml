@@ -1,23 +1,134 @@
 @model PlannedToAT.Models.SurveyManagementModel
 @{
     ViewData["Title"] = "Student Survey";
+    Layout = null;
 }
 
-<div class="container mt-5">
-    <div class="card bg-light shadow-lg p-4 border-primary">
-        <h2 class="text-center text-primary">@Model.SurveyTitle</h2>
-        
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+        }
+        .navbar {
+            background-color: #2d3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 14px;
+        }
+        .navbar .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            margin-left: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3e50;
+        }
+        .form-group {
+            margin-bottom: 30px;
+        }
+        label.form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #333;
+        }
+        textarea, input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-check {
+            margin-bottom: 10px;
+        }
+        .form-check-input {
+            margin-right: 8px;
+        }
+        .form-check-label {
+            font-size: 15px;
+        }
+        .submit-btn {
+            display: block;
+            margin: 0 auto;
+            background-color: #2d3e50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .submit-btn:hover {
+            background-color: #1a242f;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div><strong>Student Dashboard</strong></div>
+        <div class="nav-right">
+            <a href="/Student/StudentDashboard">Dashboard</a>
+            <a href="/Student/Profile">Profile</a>
+            <a href="/StudentSurvey">Survey</a>
+            <form id="logoutForm" asp-controller="Home" asp-action="Logout" method="post">
+                <button type="submit" class="logout-button" onclick="return confirm('Are you sure you want to log out?');">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>@Model.SurveyTitle</h2>
+
         <form method="post" asp-action="SubmitSurvey">
             @Html.AntiForgeryToken()
 
             @foreach (var question in Model.Questions)
             {
-                <div class="mb-3">
+                <div class="form-group">
                     <label class="form-label">@question.Text</label>
 
                     @if (question.Type == "Textarea")
                     {
-                        <textarea class="form-control" rows="4" name="Responses[@question.Text]" placeholder="Your answer..."></textarea>
+                        <textarea name="Responses[@question.Text]" rows="4" placeholder="Your answer..." required></textarea>
                     }
                     else if (question.Type == "Radio")
                     {
@@ -41,16 +152,15 @@
                             </div>
                         }
                     }
-                    else // Handle short-answer text input
+                    else // Short answer
                     {
-                        <input type="text" class="form-control" name="Responses[@question.Text]" placeholder="Your answer..." required />
+                        <input type="text" name="Responses[@question.Text]" placeholder="Your answer..." required />
                     }
                 </div>
             }
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-lg btn-primary">Submit Survey</button>
-            </div>
+            <button type="submit" class="submit-btn">Submit Survey</button>
         </form>
     </div>
-</div>
+</body>
+</html>

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PlannedToAT.Models;
 using LoadCsv.Services;
 using LoadCsv;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,12 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
     });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/AdminInput/Admin"; // or wherever your admin login page is
+        options.AccessDeniedPath = "/Home/AccessDenied"; // optional
+    });
 
 var app = builder.Build();
 
@@ -39,6 +46,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Routes

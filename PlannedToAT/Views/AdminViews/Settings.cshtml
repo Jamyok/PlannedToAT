@@ -1,4 +1,129 @@
-@model PlannedToAT.Models.AdminModels.AdminInputFormModel
+@model PlannedToAT.ViewModels.AdminSettingsViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin Settings";
+}
+@if (TempData["Success"] != null)
+{
+    <p style="color: green;">@TempData["Success"]</p>
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #2d3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 14px;
+        }
+        .navbar .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+        .content {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            background-color: #2d3e50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #1a242f;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div><strong>Admin Dashboard</strong></div>
+        <div class="nav-right">
+            <a href="/Home/AdminDashboard">Dashboard</a>
+            <a href="/Reports/Reports">Reports</a>
+            <a href="/Admin/SurveyForm">Survey Form</a>
+            <a href="/Admin/Settings">Settings</a>
+            <form id="logoutForm" asp-controller="AdminInput" asp-action="Logout" method="post">
+                <button type="submit" class="logout-button" onclick="return confirm('Are you sure you want to log out?');">Logout</button>
+            </form>
+        </div>
+    </div>
 
-<h2>Application Settings</h2>
-<p>The admin can manage application settings here.</p>
+    <div class="content">
+        <h2>Admin Settings</h2>
+        <form asp-action="UpdateSettings" method="post">
+            <div class="form-group">
+                <label for="FirstName">First Name</label>
+                <input asp-for="FirstName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="LastName">Last Name</label>
+                <input asp-for="LastName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input asp-for="Email" type="email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Password">New Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+</html>

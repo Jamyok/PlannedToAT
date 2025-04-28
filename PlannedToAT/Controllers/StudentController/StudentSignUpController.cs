@@ -89,7 +89,17 @@ public class StudentController : Controller
 
         return View("~/Views/StudentViews/StudentDashboard.cshtml", viewModel); // ✅ CORRECT MODEL
     }
+    public IActionResult Profile()
+{
+    // Load student profile data
+    return View();
+}
 
+public IActionResult Survey()
+{
+    // Load the survey form
+    return View();
+}
     public IActionResult Success()
     {
         return View();

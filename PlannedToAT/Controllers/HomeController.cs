@@ -36,21 +36,33 @@ namespace PlannedToAT.Controllers
         {
             return View();
         }
-        
-        public IActionResult Profile()
-        {
-            // Hardcoded student data
-            var model = new SignUpStudent
-            {
-                StudentName = "John Doe",
-                EmailAddress = "johndoe@example.com",
-                PhoneNumber = "1234567890",
-                Institution = "unf",
-                SubgroupOrTeam = "A"
-            };
 
-            return View(model);
-        }
+        [HttpGet("/Student/Profile")]
+       public IActionResult Profile()
+{
+    var studentEmail = User.Identity?.Name;
+    var student = _csvContext.CsvImportData.FirstOrDefault(s => s.Email == studentEmail);
+
+    if (student == null)
+    {
+        TempData["ErrorMessage"] = "Student not found.";
+        return RedirectToAction("StudentDashboard");
+    }
+
+    var model = new SignUpStudent
+    {
+        StudentName = student.FullName,
+        EmailAddress = student.Email,
+        PhoneNumber = student.PhoneNumber,
+        Institution = student.Cohorts,
+        SubgroupOrTeam = "A" 
+    };
+
+    return View("~/Views/StudentViews/Profile.cshtml", model);
+}
+
+
+        
         [HttpPost]
         public IActionResult UpdateProfile(SignUpStudent model)
         {
