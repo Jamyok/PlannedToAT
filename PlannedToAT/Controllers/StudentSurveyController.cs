@@ -39,11 +39,10 @@ namespace PlannedToAT.Controllers
             {
                 if (string.IsNullOrWhiteSpace(question.Options) && (question.Type == "Text" || question.Type == "Textarea"))
                 {
-                    question.Options = ""; // Ensure it's not null to prevent MySQL errors
+                    question.Options = "";
                 }
             }
 
-            // Update the static survey model
             _currentSurvey = model;
 
             dbContext.Surveys.Add(model);
@@ -60,50 +59,51 @@ namespace PlannedToAT.Controllers
                 Email = _currentSurvey.Email,
                 ProgramExperience = _currentSurvey.ProgramExperience,
                 Satisfaction = _currentSurvey.Satisfaction
-                // Add others if needed
             };
 
             return View("~/Views/StudentSurvey/StudentSurvey.cshtml", studentSurvey);
-
         }
 
-        // Display the updated student survey
         public IActionResult ViewUpdatedSurvey()
         {
-            return View("~/Views/StudentSurvey/StudentSurvey.cshtml", _currentSurvey);
+            return View("~/Views/StudentSurvey/DynamicStudentSurvey.cshtml", _currentSurvey);
         }
 
-        // Handle student survey submissions
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SubmitSurvey(StudentSurveyAnswers response)
-
         {
             if (response == null || response.Responses == null || response.Responses.Count == 0)
             {
                 return BadRequest("No responses provided.");
             }
 
-            // Ensure user is authenticated before saving the survey
-            if (!User.Identity.IsAuthenticated)
+            string studentName = Request.Form["StudentName"];
+            string studentEmail = Request.Form["Email"];
+
+            if (string.IsNullOrWhiteSpace(studentName) || string.IsNullOrWhiteSpace(studentEmail))
             {
-                return RedirectToAction("SurveySuccess", "StudentSurvey");
+                return BadRequest("Name and Email are required.");
             }
 
-            // Retrieve student email
-            string studentEmail = User.Identity.Name;
-
-            // If still null, return an error
-            if (string.IsNullOrEmpty(studentEmail))
+            var survey = new SurveyManagementModel
             {
-                return BadRequest("Unable to retrieve student email. Please log in.");
-            }
+                StudentName = studentName,
+                Email = studentEmail,
+                ProgramExperience = response.Responses.ContainsKey("Program Experience") ? response.Responses["Program Experience"] : null,
+                Satisfaction = response.Responses.ContainsKey("Satisfaction") ? response.Responses["Satisfaction"] : "",
+                SurveyTitle = _currentSurvey.SurveyTitle
+            };
+
+            dbContext.Surveys.Add(survey);
+            dbContext.SaveChanges();
 
             foreach (var entry in response.Responses)
             {
                 var surveyResponse = new StudentSurveyResponseModel
                 {
                     StudentEmail = studentEmail,
+                    StudentName = studentName,
                     Question = entry.Key,
                     Response = entry.Value
                 };
@@ -111,12 +111,11 @@ namespace PlannedToAT.Controllers
                 dbContext.StudentSurvey.Add(surveyResponse);
             }
 
-            dbContext.SaveChanges(); // Persist all responses
+            dbContext.SaveChanges();
 
             return RedirectToAction("SurveySuccess");
         }
 
-        // Success page after submission
         public IActionResult SurveySuccess()
         {
             return View("~/Views/StudentSurvey/SurveySuccess.cshtml");

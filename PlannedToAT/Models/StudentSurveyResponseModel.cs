@@ -6,20 +6,23 @@ namespace PlannedToAT.Models
     public class StudentSurveyResponseModel
     {
         [Key]
-        public int Id { get; set; } // Unique identifier (optional)
+        public int Id { get; set; }
+
         [Required]
         public string StudentEmail { get; set; }
 
         [Required]
-        public string Question { get; set; } 
+        public string StudentName { get; set; } // 🛠 Add this line!
 
         [Required]
-        public string Response { get; set; } // Stores question-response pairs
+        public string Question { get; set; }
 
+        [Required]
+        public string Response { get; set; }
     }
+
     public class StudentSurveyAnswers
     {
         public Dictionary<string, string> Responses { get; set; }
-
     }
 }
