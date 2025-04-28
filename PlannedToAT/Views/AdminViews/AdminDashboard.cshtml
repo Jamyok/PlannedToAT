@@ -1,171 +1,176 @@
-@model PlannedToAT.Models.AdminModels.AdminInputFormModel
+@model PlannedToAT.ViewModels.AdminDashboardViewModel
+@using Newtonsoft.Json
 @{
-    ViewData["Title"] = "Admin Dashboard";
-    Layout = "_AdminDashboardLayout";
+    Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <title>Admin Dashboard</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>@ViewData["Title"]</title>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
             margin: 0;
-            padding: 0;
-            background-color: #f4f7fa;
-            color: #333;
         }
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .header {
+        .navbar {
+            background-color: #2d3e50;
+            color: white;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
-            padding: 15px 30px;
-            background-color: #2d3e50;
+        }
+        .navbar a {
             color: white;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .nav {
-            display: flex;
-            gap: 20px;
-        }
-        .nav a {
-            color: #fff;
             text-decoration: none;
-            font-size: 16px;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
+            margin-left: 15px;
+            font-size: 14px;
         }
-        .nav a:hover {
-            background-color: #1f2d3d;
-        }
-        .welcome-message {
-            font-size: 20px;
-            color: #2d3e50;
-            margin-top: 20px;
-        }
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 40px;
-        }
-        .box {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 25px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .box h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #2d3e50;
-        }
-        .box p {
-            font-size: 18px;
-            color: #555;
-        }
-        .box img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
+        .navbar .nav-right {
+            display: flex;
+            align-items: center;
         }
         .logout-button {
             background-color: #e74c3c;
             color: white;
-            padding: 8px 16px;
             border: none;
+            padding: 5px 10px;
+            margin-left: 15px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
         }
         .logout-button:hover {
             background-color: #c0392b;
         }
+        .content {
+            padding: 20px;
+        }
+
+        .chart-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .chart-container {
+            flex: 1 1 22%;
+            min-width: 250px;
+            max-width: 300px;
+            height: 300px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #2d3e50;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e1e4e8;
+            cursor: pointer;
+        }
+        .tab-buttons button.active {
+            background-color: #2d3e50;
+            color: white;
+        }
+        .tab-section {
+            display: none;
+        }
+        .tab-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Welcome Message -->
-        <div class="welcome-message">
-            Welcome, @Model.FirstName!
-        </div>
-            <div class="metrics">
-        <div class="box">
-            <div id="usersChart1" style="width:100%; height:400px;"></div>
-        </div>
-        <div class="box">
-            <div id="usersChart2" style="width:100%; height:400px;"></div>
-        </div>
-        <div class="box">
-            <div id="usersChart3" style="width:100%; height:400px;"></div>
+    <div class="navbar">
+        <div><strong>Admin Dashboard</strong></div>
+        <div class="nav-right">
+            <a href="/Home/AdminDashboard?firstName=@Model.FirstName">Dashboard</a>
+            <a href="/Reports/Reports">Reports</a>
+            <a href="/Admin/SurveyForm">Survey Form</a>
+            <a href="/Admin/Settings">Settings</a>
+            <form id="logoutForm" asp-controller="AdminInput" asp-action="Logout" method="post">
+                <button type="submit" class="logout-button" onclick="return confirmLogout();">Logout</button>
+            </form>
         </div>
     </div>
+
+    <div class="content">
+        <h2>Welcome, @ViewData["FirstName"]</h2>
+        <div class="chart-grid">
+            <div class="chart-container" id="usersByState"></div>
+            <div class="chart-container" id="signupsByMonth"></div>
+            <div class="chart-container" id="formStatus"></div>
+            <div class="chart-container" id="sessionSignups"></div>
+        </div>
+
+    </div>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        //chart1
-        Highcharts.chart('usersChart1', {
+        function confirmLogout() {
+            return confirm("Are you sure you want to log out?");
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        Highcharts.chart('usersByState', {
             chart: { type: 'column' },
-            title: { text: 'User Growth Per Year' },
-            xAxis: { 
-                categories: ['2020', '2021', '2022', '2023', '2024', '2025'],
-                title: { text: 'Year' }
-            },
-            yAxis: { title: { text: 'Total Users' } },
-            series: [{ 
-                name: 'Users', 
-                data: [10, 50, 150, 300, 500, 750] // Dummy data
-            }]
+            title: { text: 'Participants by State' },
+            xAxis: { categories: @Html.Raw(JsonConvert.SerializeObject(Model.States)) },
+            yAxis: { title: { text: 'Number of Participants' } },
+            series: [{ name: 'Participants', data: @Html.Raw(JsonConvert.SerializeObject(Model.UsersPerState)) }]
         });
-        //chart2
-        Highcharts.chart('usersChart2', {
+
+        Highcharts.chart('signupsByMonth', {
             chart: { type: 'line' },
-            title: { text: 'New Users Per Month' },
-            xAxis: { 
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                title: { text: 'Month' }
-            },
-            yAxis: { title: { text: 'New Users' } },
-            series: [{ 
-                name: 'New Users', 
-                data: [0, 5, 10, 15, 20, 25] // Dummy data
-            }]
+            title: { text: 'Signups by Month' },
+            xAxis: { categories: @Html.Raw(JsonConvert.SerializeObject(Model.Months)) },
+            yAxis: { title: { text: 'Signups' } },
+            series: [{ name: 'Signups', data: @Html.Raw(JsonConvert.SerializeObject(Model.SignupsPerMonth)) }]
         });
-        //chart3
-        Highcharts.chart('usersChart3', {
-            chart: { type: 'pie'},
-            title: { text: 'Form Status'},
+
+        Highcharts.chart('sessionSignups', {
+            chart: { type: 'column' },
+            title: { text: 'Session Signups' },
+            xAxis: { categories: @Html.Raw(JsonConvert.SerializeObject(Model.SessionSignupDates)) },
+            yAxis: { title: { text: 'Signups' } },
+            series: [{ name: 'Signups', data: @Html.Raw(JsonConvert.SerializeObject(Model.SignupCounts)) }]
+        });
+
+        Highcharts.chart('formStatus', {
+            chart: { type: 'pie' },
+            title: { text: 'Form Completion Status' },
             series: [{
-                name:'Forms',
+                name: 'Forms',
                 colorByPoint: true,
                 data: [
-                    {name: 'Completed', y: 60, color: '#2ecc71'},
-                    {name: 'In Progress', y:25, color:'#f1c40f'},
-                    {name: 'Not Started', y: 15, color:'#e74c3c'}
+                    { name: 'Completed', y: @Model.CompletedForms },
+                    { name: 'In Progress', y: @Model.InProgressForms },
+                    { name: 'Not Started', y: @Model.NotStartedForms }
                 ]
             }]
-        })
-    });
-    </script>       
-</div>
+        });
+    </script>
 </body>
 </html>

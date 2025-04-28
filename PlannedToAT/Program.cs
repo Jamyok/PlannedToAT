@@ -6,6 +6,7 @@ using LoadCsv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // db builder for PostgreSQL with error resiliency
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<ImportCsvDbContext>(options =>
 
 // Register your CSV import service
 builder.Services.AddScoped<CsvImportService>();
+builder.Services.AddScoped<AdminCsvImportService>();
 
 // Add Identity services
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -36,6 +38,12 @@ builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
         options.ViewLocationFormats.Add("/Views/StudentViews/{0}.cshtml");
+    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/AdminInput/Admin"; // or wherever your admin login page is
+        options.AccessDeniedPath = "/Home/AccessDenied"; // optional
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -61,6 +69,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Routes

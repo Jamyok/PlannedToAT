@@ -50,7 +50,7 @@ namespace PlannedToAT.Controllers
 
             return RedirectToAction("SurveyUpdateSuccess", "AdminInput");
         }
-
+        [HttpGet("/StudentSurvey")]
         public IActionResult Index()
         {
             var studentSurvey = new StudentSurveyModel

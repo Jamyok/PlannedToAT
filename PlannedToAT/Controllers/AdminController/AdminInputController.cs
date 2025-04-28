@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models.AdminModels;
 using PlannedToAT.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using PlannedToAT.ViewModels;
 
 namespace AdminUser.Controllers
 {
@@ -52,9 +55,13 @@ namespace AdminUser.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home"); // Redirects to landing page
+
+
         }
+
 
         // ================================
         // 🛠 Survey Management Logic
@@ -65,6 +72,51 @@ namespace AdminUser.Controllers
         {
             return View("~/Views/AdminViews/ManageSurvey.cshtml", _surveyModel);
         }
+        
+        public IActionResult Settings()
+        {
+            var admin = dbContext.AdminSignUp.FirstOrDefault();
+            if (admin == null) return RedirectToAction("AdminDashboard", "Home");
+
+            var model = new AdminSettingsViewModel
+            {
+                FirstName = admin.FirstName,
+                LastName = admin.LastName,
+                Email = admin.Email
+            };
+
+            return View("~/Views/AdminViews/Settings.cshtml", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Admin/Settings")]
+        public IActionResult UpdateSettings(AdminSettingsViewModel updated)
+        {
+            var adminEmail = User.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(adminEmail))
+            {
+                TempData["Error"] = "Could not identify the admin user.";
+                return RedirectToAction("Settings");
+            }
+
+            var admin = dbContext.AdminSignUp.FirstOrDefault(a => a.Email == adminEmail);
+
+            if (!string.IsNullOrWhiteSpace(updated.FirstName)) admin.FirstName = updated.FirstName;
+            if (!string.IsNullOrWhiteSpace(updated.LastName)) admin.LastName = updated.LastName;
+            if (!string.IsNullOrWhiteSpace(updated.Email)) admin.Email = updated.Email;
+
+            if (!string.IsNullOrWhiteSpace(updated.Password) && updated.Password == updated.ConfirmPassword)
+            {
+                admin.Password = updated.Password;
+            }
+
+            dbContext.SaveChanges();
+            TempData["Success"] = "Account settings updated successfully.";
+
+            return RedirectToAction("Settings");
+        }
+
 
         // Save survey changes and update student survey (POST method)
         [HttpPost]

@@ -1,6 +1,7 @@
 @model IEnumerable<LoadCsv.Models.ReportsModel>
 
 @{
+    Layout = null;
     ViewData["Title"] = ViewData["ReportTitle"] ?? "Admin Reports";
 }
 
@@ -12,11 +13,41 @@
     <title>@ViewData["Title"]</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f7fa;
             color: #333;
+        }
+        .navbar {
+            background-color: #2d3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 14px;
+        }
+        .navbar .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
         }
         .dashboard-container {
             display: flex;
@@ -24,64 +55,41 @@
             align-items: center;
             padding: 20px;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        h2, h3 {
+            text-align: center;
+            color: #2d3e50;
+        }
+        table {
             width: 100%;
-            padding: 15px 30px;
-            background-color: #2d3e50;
-            color: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
         }
-        .nav {
-            display: flex;
-            gap: 20px;
-        }
-        .nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-        .nav a:hover {
-            background-color: #1f2d3d;
-        }
-        .logout-button {
-            background-color: #e74c3c;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .logout-button:hover {
-            background-color: #c0392b;
+        th {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Header Section -->
-        <div class="header">
-            <div class="logo">Admin Reports</div>
-            <nav class="nav">
-                <a href="@Url.Action("Index", "Admin")">Dashboard</a>
-                <a href="@Url.Action("Users", "Admin")">Users</a>
-                <a href="@Url.Action("Reports", "Reports")">Reports</a>
-                <a href="@Url.Action("Settings", "Admin")">Settings</a>
-            </nav>
-            <form asp-controller="AdminInput" asp-action="Logout" method="post" style="display:inline;">
-                <button type="submit" class="logout-button">Logout</button>
+    <div class="navbar">
+        <div><strong>Admin Dashboard</strong></div>
+        <div class="nav-right">
+            <a href="@Url.Action("AdminDashboard", "Home", new { firstName = ViewData["FirstName"] })">Dashboard</a>
+            <a href="/Reports/Reports">Reports</a>
+            <a href="/Admin/SurveyForm">Survey Form</a>
+            <a href="/Admin/Settings">Settings</a>
+            <form id="logoutForm" asp-controller="AdminInput" asp-action="Logout" method="post">
+                <button type="submit" class="logout-button" onclick="return confirm('Are you sure you want to log out?');">Logout</button>
             </form>
         </div>
+    </div>
 
+    <div class="dashboard-container">
         <h2>Admin Reports</h2>
 
         <form asp-controller="Reports" asp-action="Reports" method="post">
