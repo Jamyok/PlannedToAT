@@ -4,16 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using PlannedToAT.Models;
-using PlannedToAT.Models.AdminModels;
+using LoadCsv.Models;
 
-namespace PlannedToAT.Services
+namespace LoadCsv.Services
 {
     public class CsvImportService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ImportCsvDbContext _context;
 
-        public CsvImportService(ApplicationDbContext context)
+        public CsvImportService(ImportCsvDbContext context)
         {
             _context = context;
         }
@@ -97,7 +96,7 @@ namespace PlannedToAT.Services
                 }
             }
 
-            _context.ReportData.AddRange(students);
+            _context.CsvImportData.AddRange(students);
             _context.SaveChanges();
         }
     }
