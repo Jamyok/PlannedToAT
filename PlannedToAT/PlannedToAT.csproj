@@ -21,4 +21,8 @@
     <Compile Update="Models/StudentModels/StudentSignUpModel.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoadCsv\LoadCsv.csproj" />
+  </ItemGroup>
+
 </Project>
