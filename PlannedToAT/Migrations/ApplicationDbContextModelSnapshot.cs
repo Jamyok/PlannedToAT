@@ -454,6 +454,21 @@ namespace PlannedToAT.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProgramExperience")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Satisfaction")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SurveyTitle")
                         .IsRequired()
                         .HasColumnType("text");

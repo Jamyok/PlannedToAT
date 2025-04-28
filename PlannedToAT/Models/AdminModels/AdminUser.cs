@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-using PlannedToAT.Models;
 
-namespace PlannedToAT.Models.AdminModels
-
+namespace PlannedToAT.Models
 {
     public class AdminUser : IdentityUser
     {
-
-           public string? AdminRole { get; set; } //
+           public string? AdminRole { get; set; } 
 
     }
 }

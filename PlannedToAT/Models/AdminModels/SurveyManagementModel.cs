@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace PlannedToAT.Models
 {
@@ -11,6 +13,18 @@ namespace PlannedToAT.Models
         [Required]
         [Display(Name = "Title")]
         public string SurveyTitle { get; set; }
+
+        [Required]
+        public string StudentName { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        public string? ProgramExperience { get; set; }
+
+        [Required(ErrorMessage = "Please rate your satisfaction")]
+        public string? Satisfaction { get; set; }
+
         public List<SurveyQuestion> Questions { get; set; } = new List<SurveyQuestion>();
     }
 

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using PlannedToAT.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using PlannedToAT.Models;
 using PlannedToAT.Models.StudentModels;
 using PlannedToAT.Models.AdminModels;
 using LoadCsv;
@@ -32,9 +33,9 @@ namespace PlannedToAT.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult LogIn()
         {
-            return View();
+        return LocalRedirect("~/Identity/Account/Login");
         }
 
         [HttpGet("/Student/Profile")]
@@ -100,14 +101,16 @@ namespace PlannedToAT.Controllers
         // Displays the main sign-up page
         public IActionResult SignUp()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
 
         // Displays the student sign-up page
+        [HttpGet]
         public IActionResult SignUpStudent()
         {
-            return View();
+            return LocalRedirect("~/Identity/Account/Register");
         }
+
        public IActionResult StudentDashboard()
         {
             var studentEmail = User.Identity?.Name;
@@ -171,27 +174,39 @@ namespace PlannedToAT.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitStudentForm(SignUpStudent studentData)
+        {
+            if (ModelState.IsValid)
+            {
+                TempData["StudentData"] = JsonConvert.SerializeObject(studentData);
+                return RedirectToAction("StudentDashboard");
+            }
+            return View("SignUpStudent", studentData);
+        }
 
-        
+        [HttpGet]
+
         public IActionResult SignUpAdmin()
         {
             return View("~/Views/AdminViews/AdminSignUp.cshtml");
         }
 
-
-        // Handles admin form submission
         [HttpPost]
-        public IActionResult SignUpAdmin(AdminInputFormModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitAdminForm(AdminInputFormModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("AdminDashboard", new { firstName = model.FirstName });
+                TempData["AdminFirstName"] = model.FirstName;
+                return RedirectToAction("AdminDashboard");
             }
-
-            return View(model);
+            return View("SignUpAdmin", model);
         }
 
         public IActionResult AdminDashboard(string firstName)
+
         {
             var data = _csvContext.CsvImportData.ToList();
             ViewData["FirstName"] = firstName ?? "Admin";
@@ -268,10 +283,8 @@ namespace PlannedToAT.Controllers
             var model = new AdminDashboardViewModel
             {
                 FirstName = firstName,
-
                 States = usersByState.Select(x => x.State).ToList(),
                 UsersPerState = usersByState.Select(x => x.Count).ToList(),
-
                 Months = months,
                 SignupsPerMonth = signups,
 
@@ -304,9 +317,9 @@ Console.WriteLine($"AvgChecking: {model.AvgChecking}, AvgSavings: {model.AvgSavi
         }
 
         [HttpPost]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -338,7 +351,5 @@ Console.WriteLine($"AvgChecking: {model.AvgChecking}, AvgSavings: {model.AvgSavi
                 return Content("Error during import: " + ex.Message);
             }
         }
-
-
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json; // Required for TempData serialization
 using PlannedToAT.Models.StudentModels;
 using PlannedToAT.ViewModels;
 using LoadCsv;
@@ -20,6 +21,7 @@ public class StudentController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult SubmitStudentData(SignUpStudent studentData)
     {
         if (ModelState.IsValid)
@@ -28,15 +30,14 @@ public class StudentController : Controller
             return RedirectToAction("StudentDashboard", "Student", new { email = studentData.EmailAddress });
         }
 
-        // Return to the form with data if the model is invalid
         return View("StudentForm", studentData);
     }
 
-    // This method serves the SignUpStudent form, now redirecting to the correct view
-    public IActionResult SignUpStudent(SignUpStudent model)
+    public IActionResult SignUpStudent()
     {
-        return View("~/Views/StudentViews/SignUpStudent.cshtml");
+        return View();
     }
+
 
     public IActionResult StudentDashboard(string email)
     {

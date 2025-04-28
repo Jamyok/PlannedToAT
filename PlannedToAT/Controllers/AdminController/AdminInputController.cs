@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlannedToAT.Models.AdminModels;
@@ -29,7 +30,6 @@ namespace AdminUser.Controllers
             return View("~/Views/AdminViews/AdminSignUp.cshtml");
         }
 
-        // Handle the form submission (POST method)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Submit(AdminInputFormModel model)
@@ -40,28 +40,26 @@ namespace AdminUser.Controllers
                 dbContext.SaveChanges();
                 return RedirectToAction("AdminDashboard", "Home", new { firstName = model.FirstName });
             }
-
-            return View("Admin", model);
+    // Return to the sign-up form if validation fails
+    return View("Admin", model);
         }
 
-        // Admin dashboard (GET method)
         public IActionResult AdminDashboard(string firstName)
         {
-            var model = new AdminInputFormModel
-            {
-                FirstName = firstName
-            };
-
-            return View("~/Views/Home/AdminDashboard.cshtml", model); 
+            var model = new AdminInputFormModel { FirstName = firstName };
+            return View("~/Views/AdminViews/AdminDashboard.cshtml", model);
         }
 
         // Logout (POST method)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home"); // Redirects to landing page
+
+
         }
 
 
@@ -160,12 +158,17 @@ namespace AdminUser.Controllers
         }
     }
 
-    [Authorize(Roles = "Admin")]
+
+    //[Authorize(Roles = "Admin")]
+
+    [Authorize(Roles = "Admin,StudentUser")]
+
     public class AdminDashboardController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string firstName)
         {
-            return View();
+            var model = new AdminInputFormModel { FirstName = firstName };
+            return View(model);
         }
     }
 }
