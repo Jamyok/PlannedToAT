@@ -32,21 +32,49 @@ namespace PlannedToAT.Controllers.AdminController
             switch (reportSelection)
             {
                 case "TotalStudents":
-                    var totalStudentsCount = dbContext.CsvImportData.Count();
+                    int total = dbContext.CsvImportData.Count();
                     ViewData["ReportTitle"] = "Total Number of Students";
-                    ViewData["ReportData"] = totalStudentsCount.ToString();
+                    ViewData["ReportData"] = total;
                     return View("~/Views/AdminViews/Reports.cshtml");
 
                 case "StudentsWithBankAccounts":
                     reportData = dbContext.CsvImportData
-                        .Where(student => student.HasBankAccount == true)
+                        .Where(s => s.HasBankAccount == true)
                         .ToList();
                     ViewData["ReportTitle"] = "Students with Bank Accounts";
+                    ViewData["Headers"] = new List<string> { "First Name", "Last Name", "State", "Has Bank Account" };
+                    ViewData["Fields"] = new List<string> { "FirstName", "LastName", "State", "HasBankAccount" };
                     break;
 
                 case "StudentDetails":
                     reportData = dbContext.CsvImportData.ToList();
-                    ViewData["ReportTitle"] = "All Student Details";
+                    ViewData["ReportTitle"] = "Student Details";
+                    ViewData["Headers"] = new List<string> { "First Name", "Last Name", "Phone", "Email", "DOB", "Accounts", "Cohorts", "State" };
+                    ViewData["Fields"] = new List<string> { "FirstName", "LastName", "PhoneNumber", "Email", "DOB", "Accounts", "Cohorts", "State" };
+                    break;
+
+                case "StudentsByUniversity":
+                    reportData = dbContext.CsvImportData
+                        .OrderBy(student => student.Cohorts)
+                        .ToList();
+
+                    ViewData["ReportTitle"] = "Students by University";
+                    ViewData["Headers"] = new List<string> { "First Name", "Last Name", "State" }; // <- Add "State"
+                    ViewData["Fields"] = new List<string> { "FirstName", "LastName", "Cohorts" };   // <- Remember, Cohorts = University/State
+                    break;
+                    
+                case "StudentAnswers":
+                    reportData = dbContext.CsvImportData.ToList();
+                    ViewData["ReportTitle"] = "Student Answers";
+                    ViewData["Headers"] = new List<string> { "First Name", "Last Name", "Needs/Wants", "Saving Goal", "SMART Goal", "Family/Friends" };
+                    ViewData["Fields"] = new List<string> { "FirstName", "LastName", "NeedsWants", "SavingGoal", "SMARTGoal", "FamilyFriends" };
+                    break;
+
+                case "SavingsProgress":
+                    reportData = dbContext.CsvImportData.ToList();
+                    ViewData["ReportTitle"] = "Savings Progress (Start)";
+                    ViewData["Headers"] = new List<string> { "First Name", "Last Name", "Checking $ Start", "Savings $ Start", "Investing $ Start" };
+                    ViewData["Fields"] = new List<string> { "FirstName", "LastName", "CheckingBalanceStart", "SavingsBalanceStart", "InvestingBalanceStart" };
                     break;
 
                 default:

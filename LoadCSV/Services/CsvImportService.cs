@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using LoadCsv.Models;
+using Microsoft.VisualBasic.FileIO;
 
 namespace LoadCsv.Services
 {
@@ -29,44 +30,48 @@ namespace LoadCsv.Services
                 "MM/dd/yyyy hh:mm tt", "M/d/yyyy hh:mm tt"
             };
 
-            using (var reader = new StreamReader(filePath))
+            using (var parser = new TextFieldParser(filePath))
             {
-                var headers = reader.ReadLine()?.Split(',');
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
 
-                while (!reader.EndOfStream)
+                // Skip headers
+                if (!parser.EndOfData)
+                    parser.ReadFields();
+
+                while (!parser.EndOfData)
                 {
-                    var row = reader.ReadLine()?.Split(',');
-
-                    if (row == null || row.Length < 25) continue;
+                    var fields = parser.ReadFields();
+                    if (fields == null || fields.Length < 24) continue; // Allow 24+ because HasBankAccount is derived
 
                     var student = new ImportDataModel
                     {
-                        ParticipantID = int.TryParse(CleanValue(row[0]), out int id) ? id : 0,
-                        FullName = CleanValue(row[1]),
-                        Created = TryParseDate(CleanValue(row[2]), dateFormats),
-                        FirstName = CleanValue(row[3]),
-                        LastName = CleanValue(row[4]),
-                        Email = CleanValue(row[5]),
-                        PhoneNumber = CleanValue(row[6]),
-                        DOB = TryParseDate(CleanValue(row[7]), dateFormats),
-                        Cohorts = CleanValue(row[8], "Unknown"),
-                        PhotoPermission = CleanValue(row[9]),
-                        Accounts = CleanValue(row[10]),
-                        CheckingStartImage = CleanValue(row[11]),
-                        SavingsStartImage = CleanValue(row[12]),
-                        InvestingStartImage = CleanValue(row[13]),
-                        ExitTickets = CleanValue(row[14], "N/A"),
-                        NeedsWants = CleanValue(row[15]),
-                        SMARTGoal = CleanValue(row[16]),
-                        FamilyFriends = CleanValue(row[17], "N/A"),
-                        SavingGoal = CleanValue(row[18]),
-                        Session2Signup = TryParseDate(CleanValue(row[19]), dateFormats),
-                        Session3Signup = TryParseDate(CleanValue(row[20]), dateFormats),
-                        CheckingBalanceStart = TryParseDecimal(CleanValue(row[21])),
-                        SavingsBalanceStart = TryParseDecimal(CleanValue(row[22])),
-                        InvestingBalanceStart = TryParseDecimal(CleanValue(row[23])),
-                        State = CleanValue(row[24], "Unknown"),
-                        HasBankAccount = !string.IsNullOrWhiteSpace(CleanValue(row[10]))
+                        ParticipantID = int.TryParse(CleanValue(fields[0]), out int id) ? id : 0,
+                        FullName = CleanValue(fields[1]),
+                        Created = TryParseDate(CleanValue(fields[2]), dateFormats),
+                        FirstName = CleanValue(fields[3]),
+                        LastName = CleanValue(fields[4]),
+                        Email = CleanValue(fields[5]),
+                        PhoneNumber = CleanValue(fields[6]),
+                        DOB = TryParseDate(CleanValue(fields[7]), dateFormats),
+                        Cohorts = CleanValue(fields[8], "Unknown"),
+                        PhotoPermission = CleanValue(fields[9]),
+                        Accounts = CleanValue(fields[10]),
+                        CheckingStartImage = CleanValue(fields[11]),
+                        SavingsStartImage = CleanValue(fields[12]),
+                        InvestingStartImage = CleanValue(fields[13]),
+                        ExitTickets = CleanValue(fields[14], "N/A"),
+                        NeedsWants = CleanValue(fields[15]),
+                        SMARTGoal = CleanValue(fields[16]),
+                        FamilyFriends = CleanValue(fields[17], "N/A"),
+                        SavingGoal = CleanValue(fields[18]),
+                        Session2Signup = TryParseDate(CleanValue(fields[19]), dateFormats),
+                        Session3Signup = TryParseDate(CleanValue(fields[20]), dateFormats),
+                        CheckingBalanceStart = TryParseDecimal(CleanValue(fields[21])),
+                        SavingsBalanceStart = TryParseDecimal(CleanValue(fields[22])),
+                        InvestingBalanceStart = TryParseDecimal(CleanValue(fields[23])),
+                        State = CleanValue(fields.Length > 24 ? fields[24] : "", "Unknown"),
+                        HasBankAccount = !string.IsNullOrWhiteSpace(CleanValue(fields[10]))
                     };
 
                     students.Add(student);

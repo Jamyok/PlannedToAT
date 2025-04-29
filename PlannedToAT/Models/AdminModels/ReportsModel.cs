@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PlannedToAT.Models.ReportsModels
+namespace PlannedToAT.Models.AdminModels
 {
     public class ReportsModel
     {

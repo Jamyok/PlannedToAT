@@ -1,5 +1,6 @@
 @using PlannedToAT.Models
-@model PlannedToAT.Models.AdminModels.ReportsModel
+@model IEnumerable<PlannedToAT.Models.AdminModels.ReportsModel>
+
 
 @{
     ViewData["Title"] = ViewData["ReportTitle"] ?? "Admin Reports";
@@ -7,6 +8,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +21,14 @@
             background-color: #f4f7fa;
             color: #333;
         }
+
         .dashboard-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -34,14 +38,17 @@
             background-color: #2d3e50;
             color: white;
         }
+
         .logo {
             font-size: 24px;
             font-weight: bold;
         }
+
         .nav {
             display: flex;
             gap: 20px;
         }
+
         .nav a {
             color: #fff;
             text-decoration: none;
@@ -50,9 +57,11 @@
             border-radius: 4px;
             transition: background-color 0.3s ease;
         }
+
         .nav a:hover {
             background-color: #1f2d3d;
         }
+
         .logout-button {
             background-color: #e74c3c;
             color: white;
@@ -62,11 +71,53 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         .logout-button:hover {
             background-color: #c0392b;
         }
+
+        table{
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 2px 8px rgba(0,#1f2d3d 0,#1f2d3d 0,#1f2d3d 0.100%);
+        }
+
+        th,td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+         th {
+            background-color: #2d3e50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+           
+        h3, h2, p {
+           text-align: center;
+        }
+    
+        form {
+           margin-top: 20px;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+        }
+    
+        select, button {
+           margin-top: 10px;
+           padding: 8px 12px;
+           font-size: 16px;
+        }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Header Section -->
@@ -92,6 +143,9 @@
                     <option value="">Select a report</option>
                     <option value="StudentsWithBankAccounts">Students with Bank Accounts</option>
                     <option value="StudentDetails">Student Details</option>
+                    <option value="StudentsByUniversity">Students by University</option>
+                    <option value="SavingsProgress">Savings Progress</option>
+                    <option value="StudentAnswers">Student Answers</option>
                     <option value="TotalStudents">Total Number of Students</option>
                 </select>
             </div>
@@ -106,39 +160,72 @@
 
             @if (ViewData["ReportTitle"].ToString() == "Total Number of Students")
             {
-                <p>Total students: @ViewData["ReportData"]</p>
+                <p style="text-align:center;">Total students: <strong>@ViewData["ReportData"]</strong></p>
             }
+
             else if (Model != null && Model.Any())
             {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>State</th>
-                            <th>Has Bank Account</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var student in Model)
-                        {
+                if (ViewData["ReportTitle"].ToString() == "Student Answers")
+                {
+                    <table>
+                        <thead>
                             <tr>
-                                <td>@student.FirstName</td>
-                                <td>@student.LastName</td>
-                                <td>@student.State</td>
-                                <td>@(student.HasBankAccount == true ? "Yes" : "No")</td>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Needs/Wants</th>
+                                <th>SMART Goal</th>
+                                <th>Saving Goal</th>
+                                <th>Family/Friends</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr>
+                                    <td>@student.FirstName</td>
+                                    <td>@student.LastName</td>
+                                    <td>@student.NeedsWants</td>
+                                    <td>@student.SMARTGoal</td>
+                                    <td>@student.SavingGoal</td>
+                                    <td>@student.FamilyFriends</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                @foreach (var prop in ViewData["Headers"] as List<string>)
+                                {
+                                    <th>@prop</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr>
+                                    @foreach (var prop in ViewData["Fields"] as List<string>)
+                                    {
+                                        <td>@(student.GetType().GetProperty(prop)?.GetValue(student) ?? "N/A")</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             }
             else
             {
-                <p>No data available for the selected report.</p>
+                <p style="text-align:center;">No data available for the selected report.</p>
             }
-        }
 
-        <p><strong>Report generated on:</strong> @ViewData["ReportDate"]</p>
+            <p style="text-align:center;"><strong>Report generated on:</strong> @ViewData["ReportDate"]</p>
+        }
     </div>
 </body>
+
 </html>
