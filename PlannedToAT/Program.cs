@@ -121,7 +121,7 @@ public static class RoleInitializer
         }
 
         // Ensure an Admin User Exists
-        string adminEmail = "admin@example.com";
+        string adminEmail = "info@plannedtoat.org";
         string adminPassword = "Admin@123"; 
 
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
