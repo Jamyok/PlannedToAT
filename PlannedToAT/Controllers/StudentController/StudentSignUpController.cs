@@ -3,8 +3,9 @@ using Newtonsoft.Json; // Required for TempData serialization
 using PlannedToAT.Models.StudentModels;
 using PlannedToAT.ViewModels;
 using LoadCsv;
+using Microsoft.AspNetCore.Authorization;
 
-
+[Authorize(Roles = "Student")]
 public class StudentController : Controller
 {
     private readonly ImportCsvDbContext _csvContext;
