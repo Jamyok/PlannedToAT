@@ -5,7 +5,7 @@ using PlannedToAT.ViewModels;
 using LoadCsv;
 using Microsoft.AspNetCore.Authorization;
 
-[Authorize(Roles = "Student")]
+//[Authorize(Roles = "Student")]
 public class StudentController : Controller
 {
     private readonly ImportCsvDbContext _csvContext;

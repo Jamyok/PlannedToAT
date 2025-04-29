@@ -10,7 +10,7 @@ using PlannedToAT.ViewModels;
 
 namespace AdminUser.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     public class AdminInputController(ApplicationDbContext dbContext) : Controller
 
     {
